@@ -17,18 +17,26 @@ definePageMeta({
 const router = useRouter();
 const route = useRoute("laptops-booking");
 
-const mouse = useMouse();
-
 const prompt = ref(false);
+
+const mouse = ref({
+  x: 0,
+  y: 0,
+});
 
 const currentEvents = ref<EventApi[]>([]);
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
-  prompt.value = true;
-  // let title = prompt("Please enter a new title for your event");
-  // let calendarApi = selectInfo.view.calendar;
+  if (!selectInfo.jsEvent) return;
 
-  // calendarApi.unselect(); // clear date selection
+  mouse.value.x = selectInfo.jsEvent.clientX - selectInfo.jsEvent.offsetX + 30;
+  mouse.value.y = selectInfo.jsEvent.clientY - selectInfo.jsEvent.offsetY + 30;
+  prompt.value = true;
+
+  // let title = prompt("Please enter a new title for your event");
+  let calendarApi = selectInfo.view.calendar;
+
+  calendarApi.unselect(); // clear date selection
 
   // if (title) {
   //   calendarApi.addEvent({
@@ -73,14 +81,14 @@ const calendarOptions = ref<CalendarOptions>({
 </script>
 
 <template>
-  <div>
-    <div
-      class="absolute card"
-      :class="`top-[${mouse.y}px] left-[${mouse.x}px]`"
-      v-if="prompt"
-    >
-      <div class="card-body">Hello!</div>
+  <div
+    class="absolute z-50 duration-200 ease-in-out transition-all"
+    :style="`top: ${mouse.y}px; left: ${mouse.x}px;`"
+    v-if="prompt"
+  >
+    <div class="card bg-base-300">
+      <div class="card-body">x: {{ mouse.x }} y: {{ mouse.y }}</div>
     </div>
-    <FullCalendar :options="calendarOptions" />
   </div>
+  <FullCalendar :options="calendarOptions" />
 </template>
