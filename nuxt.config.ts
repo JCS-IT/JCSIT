@@ -47,6 +47,14 @@ export default defineNuxtConfig({
     },
   },
 
+  css: ["~/assets/css/main.css"],
+
+  typescript: {
+    tsConfig: {
+      include: ["./types/**/*"],
+    },
+  },
+
   modules: [
     "@nuxtjs/tailwindcss",
     "@pinia/nuxt",
