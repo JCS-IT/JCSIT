@@ -1,10 +1,9 @@
 <script setup lang="ts">
 import type {
   CalendarOptions,
-  EventApi,
   DateSelectArg,
+  EventApi,
   EventClickArg,
-  EventSourceInput,
 } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -18,23 +17,28 @@ definePageMeta({
 const router = useRouter();
 const route = useRoute("laptops-booking");
 
+const mouse = useMouse();
+
+const prompt = ref(false);
+
 const currentEvents = ref<EventApi[]>([]);
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
-  let title = prompt("Please enter a new title for your event");
-  let calendarApi = selectInfo.view.calendar;
+  prompt.value = true;
+  // let title = prompt("Please enter a new title for your event");
+  // let calendarApi = selectInfo.view.calendar;
 
-  calendarApi.unselect(); // clear date selection
+  // calendarApi.unselect(); // clear date selection
 
-  if (title) {
-    calendarApi.addEvent({
-      id: Math.random().toString(36),
-      title,
-      start: selectInfo.startStr,
-      end: selectInfo.endStr,
-      allDay: selectInfo.allDay,
-    });
-  }
+  // if (title) {
+  //   calendarApi.addEvent({
+  //     id: Math.random().toString(36),
+  //     title,
+  //     start: selectInfo.startStr,
+  //     end: selectInfo.endStr,
+  //     allDay: selectInfo.allDay,
+  //   });
+  // }
 };
 const handleEventClick = (clickInfo: EventClickArg) => {
   if (
@@ -51,6 +55,7 @@ const handleEvents = (events: EventApi[]) => {
 };
 
 const calendarOptions = ref<CalendarOptions>({
+  aspectRatio: 2,
   plugins: [dayGridPlugin, interactionPlugin],
   initialView: "dayGridMonth",
   events: [],
@@ -63,11 +68,19 @@ const calendarOptions = ref<CalendarOptions>({
   select: handleDateSelect,
   eventClick: handleEventClick,
   eventsSet: handleEvents,
+  height: "50rem",
 });
 </script>
 
 <template>
   <div>
-    <FullCalendar :options="calendarOptions" class="w-full h-full" />
+    <div
+      class="absolute card"
+      :class="`top-[${mouse.y}px] left-[${mouse.x}px]`"
+      v-if="prompt"
+    >
+      <div class="card-body">Hello!</div>
+    </div>
+    <FullCalendar :options="calendarOptions" />
   </div>
 </template>

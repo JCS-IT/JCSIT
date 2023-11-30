@@ -63,8 +63,16 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "nuxt-typed-router",
     "nuxt-headlessui",
+    "@nuxtjs/google-fonts",
     // "nuxt-vuefire",
   ],
+
+  googleFonts: {
+    preconnect: true,
+    families: {
+      Roboto: true,
+    },
+  },
 
   tailwindcss: {
     config: {

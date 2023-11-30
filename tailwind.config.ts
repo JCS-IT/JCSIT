@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-/** @type {import('tailwindcss').Config} */
+import type { Config } from "tailwindcss";
 
 const defaultTheme = require("tailwindcss/defaultTheme");
 
@@ -8,7 +8,7 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter var", ...defaultTheme.fontFamily.sans],
+        sans: ["Roboto", ...defaultTheme.fontFamily.sans],
       },
     },
   },
@@ -20,4 +20,4 @@ export default {
     // require("@tailwindcss/typography"),
     require("daisyui"),
   ],
-};
+} as Config;
