@@ -1,0 +1,14 @@
+{
+    "editor.quickSuggestions": {
+        "strings": true
+    },
+    // tailwindCSS IntelliSense
+    "tailwindCSS.emmetCompletions": true,
+    "tailwindCSS.includeLanguages": {
+        "plaintext": "html"
+    },
+    "tailwindCSS.colorDecorators": true,
+    "files.associations": {
+        "*.css": "tailwindcss"
+    },
+}
