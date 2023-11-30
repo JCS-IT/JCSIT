@@ -14,6 +14,9 @@ dependencies:
   '@vueuse/nuxt':
     specifier: ^10.6.1
     version: 10.6.1(nuxt@3.8.2)(vue@3.3.9)
+  nuxt-headlessui:
+    specifier: ^1.1.4
+    version: 1.1.4(vue@3.3.9)
   nuxt-icon:
     specifier: ^0.6.6
     version: 0.6.6(nuxt@3.8.2)(vite@4.5.0)(vue@3.3.9)
@@ -760,6 +763,15 @@ packages:
   /@fastify/busboy@2.1.0:
     resolution: {integrity: sha512-+KpH+QxZU7O4675t3mnkQKcZZg56u+K/Ct2K+N2AZYNVK8kyeo/bI18tI8aPm3tvNNRyTWfj6s5tnGNlcbQRsA==}
     engines: {node: '>=14'}
+
+  /@headlessui/vue@1.7.16(vue@3.3.9):
+    resolution: {integrity: sha512-nKT+nf/q6x198SsyK54mSszaQl/z+QxtASmgMEJtpxSX2Q0OPJX0upS/9daDyiECpeAsvjkoOrm2O/6PyBQ+Qg==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      vue: ^3.2.0
+    dependencies:
+      vue: 3.3.9
+    dev: false
 
   /@iconify/collections@1.0.362:
     resolution: {integrity: sha512-GP5YQJxjxi6LxddohkVIMg2OXgRAnZraNVJxbiopL/KsRvj9cQR65RjKZEjV9n04hiJNWURoUwYdVhI0HIHCRw==}
@@ -4290,6 +4302,18 @@ packages:
     hasBin: true
     optionalDependencies:
       fsevents: 2.3.3
+
+  /nuxt-headlessui@1.1.4(vue@3.3.9):
+    resolution: {integrity: sha512-/8C1w/nfBJBFzWvD/WUxwHFviPECO6owj8JgmwOK348E0IE7ZKhpFuEuy8rZ2hSm/JWexvz3QbmMRfndfzl3qw==}
+    dependencies:
+      '@headlessui/vue': 1.7.16(vue@3.3.9)
+      '@nuxt/kit': 3.8.2
+      pathe: 1.1.1
+    transitivePeerDependencies:
+      - rollup
+      - supports-color
+      - vue
+    dev: false
 
   /nuxt-icon@0.6.6(nuxt@3.8.2)(vite@4.5.0)(vue@3.3.9):
     resolution: {integrity: sha512-rTRUIjYVlYAyj6ZPVVwGxyyiINNudhC6r9vF96Ec5ZaLOC6mSdUBnJ3oV6sJgViYrIkDLwbIjviFvRcZzvgu3g==}

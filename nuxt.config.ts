@@ -54,6 +54,7 @@ export default defineNuxtConfig({
     "nuxt-icon",
     "@vueuse/nuxt",
     "nuxt-typed-router",
+    "nuxt-headlessui",
   ],
 
   tailwindcss: {
