@@ -63,6 +63,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "nuxt-typed-router",
     "nuxt-headlessui",
+    "nuxt-vuefire",
   ],
 
   tailwindcss: {
@@ -78,4 +79,18 @@ export default defineNuxtConfig({
       ],
     },
   },
+
+  // vuefire: {
+  //   // config: {},
+  //   // auth: true,
+  //   // appCheck: {
+  //   //   debug: process.env.NODE_ENV !== "production",
+  //   //   isTokenAutoRefreshEnabled: true,
+  //   //   provider: "ReCaptchaV3",
+  //   //   key: "",
+  //   // },
+  //   emulators: {
+  //     enabled: true,
+  //   },
+  // },
 });
