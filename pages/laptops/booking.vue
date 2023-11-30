@@ -18,19 +18,6 @@ definePageMeta({
 const router = useRouter();
 const route = useRoute("laptops-booking");
 
-const targetCart = ref<number | null>(null);
-
-const events = ref<EventSourceInput[]>([
-  [
-    { title: "event 1", date: "2023-11-29", color: "red" },
-    { title: "event 2", date: "2023-11-30", color: "green" },
-  ],
-  [
-    { title: "event 4", date: "2023-11-30", color: "green" },
-    { title: "event 3", date: "2023-11-29", color: "red" },
-  ],
-]);
-
 const currentEvents = ref<EventApi[]>([]);
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
@@ -77,21 +64,10 @@ const calendarOptions = ref<CalendarOptions>({
   eventClick: handleEventClick,
   eventsSet: handleEvents,
 });
-
-watch(targetCart, (cart) => {
-  if (cart) {
-    calendarOptions.value.events = events.value[cart - 1];
-  }
-});
 </script>
 
 <template>
-  <div class="flex gap-2">
-    <Button v-for="number in 10" :key="number" @click="targetCart = number">
-      {{ number }}
-    </Button>
-  </div>
-  <div v-if="targetCart">
+  <div>
     <FullCalendar :options="calendarOptions" class="w-full h-full" />
   </div>
 </template>
