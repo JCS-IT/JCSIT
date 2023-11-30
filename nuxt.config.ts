@@ -63,7 +63,7 @@ export default defineNuxtConfig({
     "@vueuse/nuxt",
     "nuxt-typed-router",
     "nuxt-headlessui",
-    "nuxt-vuefire",
+    // "nuxt-vuefire",
   ],
 
   tailwindcss: {
