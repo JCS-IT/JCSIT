@@ -5,7 +5,7 @@ const route = useRoute("laptops");
 </script>
 
 <template>
-  <div class="flex gap-2 flex-wrap justify-center">
+  <div class="flex flex-col gap-2 flex-wrap justify-center">
     <Button
       v-for="cart in carts"
       :key="cart.id"
@@ -14,6 +14,7 @@ const route = useRoute("laptops");
         backgroundColor: `#${cart.color.bg}`,
         color: `#${cart.color.text}`,
       }"
+      class="justify-start"
     >
       {{ `Cart ${cart.id} (${cart.name.split(" ")[0]} | ${cart.location})` }}
     </Button>
