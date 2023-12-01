@@ -2,14 +2,12 @@
 import type {
   CalendarOptions,
   DateSelectArg,
-  EventApi,
   EventClickArg,
 } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/vue3";
 import { blocks, carts } from "~/data/mapping";
-import { onClickOutside } from "@vueuse/core";
 
 definePageMeta({
   title: "Booking",
@@ -29,11 +27,6 @@ const prompts = ref({
 
 const calendar = ref();
 
-onClickOutside(calendar, () => {
-  prompts.value.create = false;
-  prompts.value.delete = false;
-});
-
 const metaData = ref<DateSelectArg>();
 
 const targetPose = ref({
@@ -46,8 +39,6 @@ const newEvent = ref({
   cart: "",
   block: "",
 });
-
-const currentEvents = ref<EventApi[]>([]);
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
   let calendarApi = selectInfo.view.calendar;
@@ -67,12 +58,12 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
     window.innerHeight - 465
   );
 
-  calendarApi.unselect(); // clear date selection
-
   prompts.value.create =
     metaData.value?.startStr === selectInfo.startStr
       ? !prompts.value.create
       : true;
+
+  calendarApi.unselect(); // clear date selection
 
   metaData.value = selectInfo;
 };
