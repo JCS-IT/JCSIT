@@ -17,7 +17,7 @@ definePageMeta({
 });
 
 const router = useRouter();
-const route = useRoute("laptops-booking");
+const route = useRoute("laptops-cart-id");
 
 const dayjs = useDayjs();
 

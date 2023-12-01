@@ -14,9 +14,7 @@ const carts = ref([
     <Button
       v-for="cart in carts"
       :key="cart.id"
-      @click="
-        router.push({ name: 'laptops-booking', query: { cart: cart.id } })
-      "
+      @click="router.push({ name: 'laptops-cart-id', params: { id: cart.id } })"
     >
       {{ cart.name }}
     </Button>

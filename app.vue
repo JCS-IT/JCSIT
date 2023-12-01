@@ -1,21 +1,41 @@
 <script setup lang="ts">
 const router = useRouter();
-const route = useRoute("laptops-booking");
+const route = useRoute();
+
+console.log(route.fullPath);
+
+const breadcrumbs = computed(() => {
+  const pathArray = route.fullPath.split("/").filter(Boolean);
+  return pathArray.map((segment, index) => {
+    return {
+      label: segment,
+      url: "/" + pathArray.slice(0, index + 1).join("/"),
+    };
+  });
+});
 </script>
 
 <template>
   <div class="flex flex-col min-h-screen min-w-full overflow-x-hidden">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
-      <div class="navbar-start join">
+      <div class="gap-2 flex-wrap">
         <button
           class="text-xl font-bold"
           @click="router.push({ name: 'index' })"
         >
           JCS IT
         </button>
+        <div class="text-sm breadcrumbs">
+          <ul>
+            <li />
+            <li v-for="(item, index) in breadcrumbs" :key="index">
+              <a @click.prevent="navigateTo(item.url)">
+                {{ item.label }}
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="navbar-center"></div>
-      <div class="navbar-end"></div>
     </header>
     <main class="flex-grow">
       <div class="flex flex-col justify-between h-full">
