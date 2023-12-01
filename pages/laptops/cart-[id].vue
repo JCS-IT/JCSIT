@@ -7,7 +7,7 @@ import type {
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/vue3";
-import { blocks, carts } from "~/data/mapping";
+import { blocks } from "~/data/mapping";
 
 definePageMeta({
   title: "Booking",
@@ -36,7 +36,7 @@ const targetPose = ref({
 
 const newEvent = ref({
   name: "",
-  cart: "",
+  room: "",
   block: "",
 });
 
@@ -95,14 +95,11 @@ const calendarOptions = ref<CalendarOptions>({
 
 const addEvent = (e: SubmitEvent) => {
   e.preventDefault();
-  if (!newEvent.value.name || !newEvent.value.cart || !newEvent.value.block)
+  if (!newEvent.value.name || !newEvent.value.room || !newEvent.value.block)
     return;
 
-  const cart = carts.find((c) => c.name === newEvent.value.cart);
   // @ts-expect-error - Hack but it works
   const block = blocks[newEvent.value.block];
-
-  if (!cart || !block) return;
 
   const calendarApi = calendar.value?.getApi();
 
@@ -112,17 +109,17 @@ const addEvent = (e: SubmitEvent) => {
     end: `${metaData.value?.startStr}T${block.end}`,
     allDay: false,
     extendedProps: {
-      cart,
+      room: newEvent.value.room,
       block: newEvent.value.block,
     },
   });
 
   prompts.value.create = false;
-  newEvent.value = { name: "", cart: "", block: "" };
+  newEvent.value = { name: "", room: "", block: "" };
 };
 
 const cancel = () => {
-  newEvent.value = { name: "", cart: "", block: "" };
+  newEvent.value = { name: "", room: "", block: "" };
   prompts.value.create = false;
   prompts.value.delete = false;
 };
@@ -140,28 +137,19 @@ const cancel = () => {
           <div class="form-control gap-2">
             <h2 class="text-2xl font-bold">New booking</h2>
             <span>{{ dayjs(metaData?.start).format("dddd, MMMM DD") }}</span>
-            <InputText
+            <InputBasic
+              type="text"
               placeholder="Name"
               v-model="newEvent.name"
-              tooltip="test"
+            />
+            <InputBasic
+              type="number"
+              placeholder="Room Number"
+              v-model="newEvent.room"
             />
             <InputDropdown
-              placeholder="Select a cart"
-              :options="
-                carts.map((c) => {
-                  return {
-                    label: `Cart ${c.id} (${c.name.split(' ')[0]} | ${
-                      c.location
-                    })`,
-                    value: c.name,
-                  };
-                })
-              "
-              v-model="newEvent.cart"
-            />
-            <InputDropdown
-              :options="[...Array(4).keys()].map((i) => `Block ${i + 1}`)"
-              placeholder="Select a block"
+              :options="Object.keys(blocks)"
+              placeholder="Select a time"
               v-model="newEvent.block"
             />
             <div class="grid grid-cols-2 gap-2">
