@@ -64,6 +64,7 @@ export default defineNuxtConfig({
     "nuxt-typed-router",
     "nuxt-headlessui",
     "@nuxtjs/google-fonts",
+    "dayjs-nuxt",
     // "nuxt-vuefire",
   ],
 
