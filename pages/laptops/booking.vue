@@ -20,13 +20,16 @@ const route = useRoute("laptops-booking");
 
 const dayjs = useDayjs();
 
-const prompt = ref(false);
+const prompts = ref({
+  create: false,
+  delete: false,
+});
 
 const calendar = ref();
 
 const metaData = ref<DateSelectArg>();
 
-const mouse = ref({
+const targetPose = ref({
   x: 0,
   y: 0,
 });
@@ -40,15 +43,31 @@ const newEvent = ref({
 const currentEvents = ref<EventApi[]>([]);
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
-  if (!selectInfo.jsEvent) return;
-
-  mouse.value.x = selectInfo.jsEvent.clientX - selectInfo.jsEvent.offsetX;
-  mouse.value.y = selectInfo.jsEvent.clientY - selectInfo.jsEvent.offsetY;
-  prompt.value = true;
-
   let calendarApi = selectInfo.view.calendar;
 
+  if (!selectInfo.jsEvent) return;
+
+  // set to the mouse position
+  targetPose.value.x = selectInfo.jsEvent.x - selectInfo.jsEvent.offsetX * 1.25;
+  targetPose.value.y = selectInfo.jsEvent.y - selectInfo.jsEvent.offsetY * 1.25;
+
+  targetPose.value.x = Math.min(
+    Math.max(targetPose.value.x, 0),
+    window.innerWidth - 300
+  );
+  targetPose.value.y = Math.min(
+    Math.max(targetPose.value.y, 0),
+    window.innerHeight - targetPose.value.y * 0.8
+  );
+
   calendarApi.unselect(); // clear date selection
+
+  prompts.value.create = true;
+
+  // prompts.value.create =
+  //   metaData.value?.startStr === selectInfo.startStr
+  //     ? !prompts.value.create
+  //     : true;
 
   metaData.value = selectInfo;
 };
@@ -101,26 +120,28 @@ const addEvent = (e: SubmitEvent) => {
     },
   });
 
-  prompt.value = false;
+  prompts.value.create = false;
   newEvent.value = { name: "", cart: "", block: "" };
 };
 
 const cancel = () => {
   newEvent.value = { name: "", cart: "", block: "" };
-  prompt.value = false;
+  prompts.value.create = false;
+  prompts.value.delete = false;
 };
 </script>
 
 <template>
   <div
     class="absolute z-50 duration-200 ease-in-out transition-all"
-    :style="`top: ${mouse.y}px; left: ${mouse.x}px;`"
-    v-if="prompt"
+    :style="`top: ${targetPose.y}px; left: ${targetPose.x}px;`"
+    v-if="prompts.create"
   >
-    <div class="card bg-base-300 border">
+    <div class="card bg-base-300 border" id="newEventPrompt">
       <div class="card-body">
         <div class="form-control gap-2">
-          <span> </span>
+          <h2 class="text-2xl font-bold">New booking</h2>
+          <span>{{ dayjs(metaData?.start).format("dddd, MMMM DD") }}</span>
           <InputText
             placeholder="Name"
             v-model="newEvent.name"
