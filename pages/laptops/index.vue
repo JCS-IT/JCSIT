@@ -1,22 +1,21 @@
 <script setup lang="ts">
+import { carts } from "@/data/mapping";
 const router = useRouter();
 const route = useRoute("laptops");
-
-const carts = ref([
-  { id: 1, name: "Red Cart" },
-  { id: 2, name: "Blue Cart" },
-  { id: 3, name: "Green Cart" },
-]);
 </script>
 
 <template>
-  <div class="flex gap-2">
+  <div class="flex gap-2 flex-wrap justify-center">
     <Button
       v-for="cart in carts"
       :key="cart.id"
       @click="router.push({ name: 'laptops-cart-id', params: { id: cart.id } })"
+      :style="{
+        backgroundColor: `#${cart.color.bg}`,
+        color: `#${cart.color.text}`,
+      }"
     >
-      {{ cart.name }}
+      {{ `Cart ${cart.id} (${cart.name.split(" ")[0]} | ${cart.location})` }}
     </Button>
   </div>
 </template>
