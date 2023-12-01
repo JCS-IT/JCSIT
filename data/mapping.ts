@@ -23,21 +23,37 @@ export const carts = [
     id: 1,
     name: "Red Cart",
     location: "LC3",
+    color: {
+      bg: "ff0000",
+      text: "000000",
+    },
   },
   {
     id: 2,
     name: "Green Cart",
     location: "LC3",
+    color: {
+      bg: "00ff00",
+      text: "000000",
+    },
   },
   {
     id: 3,
     name: "Blue Cart",
     location: "LC3",
+    color: {
+      bg: "0000ff",
+      text: "ffffff",
+    },
   },
   {
     id: 4,
     name: "Yellow Cart",
     location: "LC3",
+    color: {
+      bg: "ffff00",
+      text: "000000",
+    },
   },
 
   // LC2
@@ -46,21 +62,37 @@ export const carts = [
     id: 5,
     name: "Gold Cart",
     location: "LC2",
+    color: {
+      bg: "f0c434",
+      text: "000000",
+    },
   },
   {
     id: 6,
     name: "Silver Cart",
     location: "LC2",
+    color: {
+      bg: "cad3d7",
+      text: "000000",
+    },
   },
   {
     id: 7,
     name: "Bronze Cart",
     location: "LC2",
+    color: {
+      bg: "c67d1c",
+      text: "000000",
+    },
   },
   {
     id: 8,
     name: "Zinc Cart",
     location: "LC2",
+    color: {
+      bg: "655b55",
+      text: "ffffff",
+    },
   },
 
   // Misc
@@ -69,10 +101,18 @@ export const carts = [
     id: 9,
     name: "Poseidon Cart",
     location: "Band",
+    color: {
+      bg: "133955",
+      text: "ffffff",
+    },
   },
   {
     id: 10,
     name: "Hades Cart",
     location: "Office",
+    color: {
+      bg: "615316",
+      text: "ffffff",
+    },
   },
 ] as const;
