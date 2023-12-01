@@ -4,7 +4,7 @@ const route = useRoute("laptops-booking");
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen min-w-full">
+  <div class="flex flex-col min-h-screen min-w-full overflow-x-hidden">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
       <div class="navbar-start join">
         <button
