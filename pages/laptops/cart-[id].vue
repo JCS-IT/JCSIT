@@ -14,6 +14,7 @@ import { onClickOutside } from "@vueuse/core";
 definePageMeta({
   title: "Booking",
   description: "Book a laptop cart",
+  layout: "full-width",
 });
 
 const router = useRouter();
@@ -98,6 +99,7 @@ const calendarOptions = ref<CalendarOptions>({
   select: handleDateSelect,
   eventClick: handleEventClick,
   height: "50rem",
+  windowResizeDelay: 0,
 });
 
 const addEvent = (e: SubmitEvent) => {
@@ -136,7 +138,7 @@ const cancel = () => {
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative w-full">
     <div
       class="absolute z-50 duration-200 ease-in-out transition-all"
       :style="`top: ${targetPose.y}px; left: ${targetPose.x}px;`"

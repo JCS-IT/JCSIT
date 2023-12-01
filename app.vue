@@ -16,7 +16,7 @@ const breadcrumbs = computed(() => {
 </script>
 
 <template>
-  <div class="flex flex-col min-h-screen min-w-full overflow-x-hidden">
+  <div class="flex flex-col min-h-screen overflow-x-hidden">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
       <div class="gap-2 flex-wrap">
         <button
@@ -25,7 +25,7 @@ const breadcrumbs = computed(() => {
         >
           JCS IT
         </button>
-        <div class="text-sm breadcrumbs">
+        <div class="text-sm p-0 breadcrumbs">
           <ul>
             <li />
             <li v-for="(item, index) in breadcrumbs" :key="index">
