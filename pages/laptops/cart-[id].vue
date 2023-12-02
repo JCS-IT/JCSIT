@@ -37,7 +37,10 @@ const targetPose = ref({
 const newEvent = ref({
   name: "",
   room: "",
-  block: "",
+  block: {
+    start: "",
+    end: "",
+  },
 });
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
@@ -46,8 +49,8 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
   if (!selectInfo.jsEvent) return;
 
   // set to the mouse position
-  targetPose.value.x = selectInfo.jsEvent.x - selectInfo.jsEvent.offsetX * 1.25;
-  targetPose.value.y = selectInfo.jsEvent.y - selectInfo.jsEvent.offsetY * 1.25;
+  targetPose.value.x = selectInfo.jsEvent.x - selectInfo.jsEvent.offsetX;
+  targetPose.value.y = selectInfo.jsEvent.y - selectInfo.jsEvent.offsetY;
 
   targetPose.value.x = Math.min(
     Math.max(targetPose.value.x, 0),
@@ -55,7 +58,7 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
   );
   targetPose.value.y = Math.min(
     Math.max(targetPose.value.y, 0),
-    window.innerHeight - 465
+    window.innerHeight - 550
   );
 
   prompts.value.create =
@@ -95,31 +98,46 @@ const calendarOptions = ref<CalendarOptions>({
 
 const addEvent = (e: SubmitEvent) => {
   e.preventDefault();
-  if (!newEvent.value.name || !newEvent.value.room || !newEvent.value.block)
+  if (
+    !newEvent.value.name ||
+    !newEvent.value.room ||
+    !newEvent.value.block.start ||
+    !newEvent.value.block.end
+  )
     return;
 
-  // @ts-expect-error - Hack but it works
-  const block = blocks[newEvent.value.block];
+  const startBlock = blocks[newEvent.value.block.start];
+  const endBlock = blocks[newEvent.value.block.end];
 
   const calendarApi = calendar.value?.getApi();
 
   calendarApi.addEvent({
-    title: newEvent.value.name,
-    start: `${metaData.value?.startStr}T${block.start}`,
-    end: `${metaData.value?.startStr}T${block.end}`,
+    title: `${newEvent.value.name} - ${newEvent.value.room}`,
+    start: `${metaData.value?.startStr}T${startBlock.start}`,
+    end: `${metaData.value?.startStr}T${endBlock.end}`,
     allDay: false,
     extendedProps: {
       room: newEvent.value.room,
-      block: newEvent.value.block,
+      block: `${newEvent.value.block.start} ${
+        newEvent.value.block.end === newEvent.value.block.start
+          ? ""
+          : "- " + newEvent.value.block.end.split(" ")[1]
+      }`,
     },
   });
 
-  prompts.value.create = false;
-  newEvent.value = { name: "", room: "", block: "" };
+  clear();
 };
 
-const cancel = () => {
-  newEvent.value = { name: "", room: "", block: "" };
+const clear = () => {
+  newEvent.value = {
+    name: "",
+    room: "",
+    block: {
+      start: "",
+      end: "",
+    },
+  };
   prompts.value.create = false;
   prompts.value.delete = false;
 };
@@ -137,6 +155,7 @@ const cancel = () => {
           <div class="form-control gap-2">
             <h2 class="text-2xl font-bold">New booking</h2>
             <span>{{ dayjs(metaData?.start).format("dddd, MMMM DD") }}</span>
+            <!-- Info -->
             <InputBasic
               type="text"
               placeholder="Name"
@@ -147,22 +166,36 @@ const cancel = () => {
               placeholder="Room Number"
               v-model="newEvent.room"
             />
+
+            <!-- Blocks -->
             <InputDropdown
               :options="Object.keys(blocks)"
-              placeholder="Select a time"
-              v-model="newEvent.block"
+              placeholder="Start block"
+              v-model="newEvent.block.start"
+              @change="newEvent.block.end = newEvent.block.start"
+            />
+            <InputDropdown
+              :options="Object.keys(blocks)"
+              placeholder="End block"
+              v-model="newEvent.block.end"
             />
             <div class="grid grid-cols-2 gap-2">
               <Button
                 class="btn-success w-full"
                 @click="addEvent"
                 tooltip="Confirm"
+                :disabled="
+                  !newEvent.name ||
+                  !newEvent.room ||
+                  !newEvent.block.start ||
+                  !newEvent.block.end
+                "
               >
                 <Icon name="mdi:check" />
               </Button>
               <Button
                 class="btn-error w-full"
-                @click="cancel()"
+                @click="clear()"
                 tooltip="cancel"
               >
                 <Icon name="mdi:cancel" />
@@ -176,7 +209,7 @@ const cancel = () => {
       <template #eventContent="arg">
         <div class="fc-daygrid-event-dot"></div>
         <span class="fc-event-time">{{ arg.event.extendedProps.block }}</span>
-        <span class="fc-event-title">{{ arg.event.title }}</span>
+        <span class="fc-event-title">{{ arg.event.title }} - </span>
       </template>
     </FullCalendar>
   </div>
