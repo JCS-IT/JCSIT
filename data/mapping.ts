@@ -1,4 +1,4 @@
-export const blocks = {
+export const blocks: Record<string, { start: string; end: string }> = {
   "Before School": {
     start: "07:00",
     end: "09:00",
@@ -29,7 +29,17 @@ export const blocks = {
   },
 };
 
-export const carts = [
+interface Cart {
+  id: number;
+  name: string;
+  location: string;
+  color: {
+    bg: string;
+    text: string;
+  };
+}
+
+export const carts: Cart[] = [
   // LC3
   {
     id: 1,
