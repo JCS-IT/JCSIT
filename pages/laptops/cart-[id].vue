@@ -222,7 +222,7 @@ const clear = () => {
 <style scoped>
 .v-enter-active,
 .v-leave-active {
-  transition: opacity 100ms ease;
+  transition: opacity 150ms ease;
 }
 
 .v-enter-from,
