@@ -39,7 +39,7 @@ interface Cart {
   };
 }
 
-export const carts: Cart[] = [
+export const CartMap: Cart[] = [
   // LC3
   {
     id: 1,
