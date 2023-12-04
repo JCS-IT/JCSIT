@@ -34,9 +34,16 @@ const targetPose = ref({
   y: 0,
 });
 
-const newEvent = ref({
+const newEvent = ref<{
+  name: string;
+  room: number | null;
+  block: {
+    start: string;
+    end: string;
+  };
+}>({
   name: "",
-  room: "",
+  room: null,
   block: {
     start: "",
     end: "",
@@ -133,7 +140,7 @@ const addEvent = (e: SubmitEvent) => {
 const clear = () => {
   newEvent.value = {
     name: "",
-    room: "",
+    room: null,
     block: {
       start: "",
       end: "",
@@ -213,7 +220,7 @@ const clear = () => {
       <template #eventContent="arg">
         <div class="fc-daygrid-event-dot"></div>
         <span class="fc-event-time">{{ arg.event.extendedProps.block }}</span>
-        <span class="fc-event-title">{{ arg.event.title }} - </span>
+        <span class="fc-event-title">{{ arg.event.title }}</span>
       </template>
     </FullCalendar>
   </div>
