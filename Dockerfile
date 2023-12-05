@@ -22,5 +22,5 @@ RUN pnpm run build
 
 # Run
 
-CMD ["pnpm", "run", "preview"]
+CMD ["node" ".output/server/index.mjs "]
 
