@@ -39,7 +39,7 @@ interface Cart {
   };
 }
 
-export const carts: Cart[] = [
+export const CartMap: Cart[] = [
   // LC3
   {
     id: 1,
@@ -131,7 +131,7 @@ export const carts: Cart[] = [
   {
     id: 10,
     name: "Hades Cart",
-    location: "Office",
+    location: "1601",
     color: {
       bg: "615316",
       text: "ffffff",

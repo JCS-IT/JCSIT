@@ -36,7 +36,7 @@ const parsedOptions = computed(() => {
       v-for="option in parsedOptions"
       :key="option.value"
       tabindex="1"
-      class="text-lg duration-100"
+      class="text-lg"
       :value="option.value"
     >
       {{ option.label }}
