@@ -15,7 +15,7 @@ const locations = ref({
 <template>
   <div class="flex flex-col gap-2">
     <div
-      class="flex flex-col gap-2 flex-wrap justify-center group-[]:"
+      class="flex flex-col gap-2 flex-wrap justify-center"
       v-for="(carts, location) in locations"
     >
       <div class="divider h-0">{{ location }}</div>
