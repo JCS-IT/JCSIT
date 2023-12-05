@@ -33,54 +33,30 @@ export const blocks: Record<string, { start: string; end: string }> = {
 
 export const FloorMap: Floor[] = [
   {
-    name: "Third Floor",
+    name: "Main Floor",
     carts: [
       {
-        id: 1,
-        name: "Red Cart",
+        id: 9,
+        name: "Poseidon Cart",
         location: {
-          room: "LC3",
-          floor: "3",
+          room: "1601",
+          floor: "1",
         },
         color: {
-          bg: "ff0000",
-          text: "000000",
-        },
-      },
-      {
-        id: 2,
-        name: "Green Cart",
-        location: {
-          room: "LC3",
-          floor: "3",
-        },
-        color: {
-          bg: "00ff00",
-          text: "000000",
-        },
-      },
-      {
-        id: 3,
-        name: "Blue Cart",
-        location: {
-          room: "LC3",
-          floor: "3",
-        },
-        color: {
-          bg: "0000ff",
+          bg: "133955",
           text: "ffffff",
         },
       },
       {
-        id: 4,
-        name: "Yellow Cart",
+        id: 10,
+        name: "Hades Cart",
         location: {
-          room: "LC3",
-          floor: "3",
+          room: "1601",
+          floor: "1",
         },
         color: {
-          bg: "ffff00",
-          text: "000000",
+          bg: "615316",
+          text: "ffffff",
         },
       },
     ],
@@ -139,30 +115,54 @@ export const FloorMap: Floor[] = [
     ],
   },
   {
-    name: "Main Floor",
+    name: "Third Floor",
     carts: [
       {
-        id: 9,
-        name: "Poseidon Cart",
+        id: 1,
+        name: "Red Cart",
         location: {
-          room: "1601",
-          floor: "1",
+          room: "LC3",
+          floor: "3",
         },
         color: {
-          bg: "133955",
+          bg: "ff0000",
+          text: "000000",
+        },
+      },
+      {
+        id: 2,
+        name: "Green Cart",
+        location: {
+          room: "LC3",
+          floor: "3",
+        },
+        color: {
+          bg: "00ff00",
+          text: "000000",
+        },
+      },
+      {
+        id: 3,
+        name: "Blue Cart",
+        location: {
+          room: "LC3",
+          floor: "3",
+        },
+        color: {
+          bg: "0000ff",
           text: "ffffff",
         },
       },
       {
-        id: 10,
-        name: "Hades Cart",
+        id: 4,
+        name: "Yellow Cart",
         location: {
-          room: "1601",
-          floor: "1",
+          room: "LC3",
+          floor: "3",
         },
         color: {
-          bg: "615316",
-          text: "ffffff",
+          bg: "ffff00",
+          text: "000000",
         },
       },
     ],

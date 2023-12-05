@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { FloorMap } from "@/data/mapping";
 const router = useRouter();
-
-const floors = ref(FloorMap);
 </script>
 
 <template>
-  <div class="flex flex-col gap-2">
-    <div class="flex flex-col gap-2 flex-wrap" v-for="floor in floors">
+  <div class="grid gap-2">
+    <div class="grid gap-2 flex-wrap" v-for="floor in FloorMap.toReversed()">
       <div class="divider h-0">{{ floor.name }}</div>
       <div class="flex flex-row flex-wrap gap-1 justify-center">
         <Button
