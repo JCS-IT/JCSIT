@@ -14,7 +14,7 @@ const breadcrumbs = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-screen overflow-x-hidden">
+  <div class="flex flex-col min-h-screen">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
       <div class="gap-2 flex-wrap">
         <button
