@@ -20,7 +20,7 @@ const floors = ref(FloorMap.toReversed());
             backgroundColor: `#${cart.color.bg}`,
             color: `#${cart.color.text}`,
           }"
-          class="justify-start"
+          class="flex-grow"
         >
           {{
             `Cart ${cart.id} (${cart.name.split(" ")[0]} | ${
