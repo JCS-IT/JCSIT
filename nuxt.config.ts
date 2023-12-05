@@ -75,20 +75,6 @@ export default defineNuxtConfig({
     },
   },
 
-  tailwindcss: {
-    config: {
-      content: ["./index.html", "./src/**/*.{vue,js,ts,jsx,tsx}"],
-      daisyui: {
-        themes: ["light", "dark"],
-      },
-      plugins: [
-        // require('@tailwindcss/forms'),
-        // require("@tailwindcss/typography"),
-        require("daisyui"),
-      ],
-    },
-  },
-
   // vuefire: {
   //   // config: {},
   //   // auth: true,
