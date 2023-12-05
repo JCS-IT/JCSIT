@@ -150,7 +150,7 @@ export const CartMap: Cart[] = [
     id: 9,
     name: "Poseidon Cart",
     location: {
-      room: "1601",
+      room: "Band",
       floor: "1",
     },
     color: {
