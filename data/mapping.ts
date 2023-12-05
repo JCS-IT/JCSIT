@@ -1,3 +1,5 @@
+import type { Floor } from "@/types";
+
 export const blocks: Record<string, { start: string; end: string }> = {
   "Before School": {
     start: "07:00",
@@ -29,160 +31,140 @@ export const blocks: Record<string, { start: string; end: string }> = {
   },
 };
 
-interface Cart {
-  id: number;
-  name: string;
-  location: {
-    room: string;
-    floor: string;
-  };
-  color: {
-    bg: string;
-    text: string;
-  };
-}
-
-export const CartMap: Cart[] = [
-  // 3rd floor
+export const FloorMap: Floor[] = [
   {
-    id: 1,
-    name: "Red Cart",
-    location: {
-      room: "LC3",
-      floor: "3",
-    },
-    color: {
-      bg: "ff0000",
-      text: "000000",
-    },
-  },
-  {
-    id: 2,
-    name: "Green Cart",
-    location: {
-      room: "LC3",
-      floor: "3",
-    },
-    color: {
-      bg: "00ff00",
-      text: "000000",
-    },
-  },
-  {
-    id: 3,
-    name: "Blue Cart",
-    location: {
-      room: "LC3",
-      floor: "3",
-    },
-    color: {
-      bg: "0000ff",
-      text: "ffffff",
-    },
-  },
-  {
-    id: 4,
-    name: "Yellow Cart",
-    location: {
-      room: "LC3",
-      floor: "3",
-    },
-    color: {
-      bg: "ffff00",
-      text: "000000",
-    },
-  },
-
-  // 2nd floor
-
-  {
-    id: 5,
-    name: "Gold Cart",
-    location: {
-      room: "LC2",
-      floor: "2",
-    },
-    color: {
-      bg: "f0c434",
-      text: "000000",
-    },
-  },
-  {
-    id: 6,
-    name: "Silver Cart",
-    location: {
-      room: "LC2",
-      floor: "2",
-    },
-    color: {
-      bg: "cad3d7",
-      text: "000000",
-    },
-  },
-  {
-    id: 7,
-    name: "Bronze Cart",
-    location: {
-      room: "LC2",
-      floor: "2",
-    },
-    color: {
-      bg: "c67d1c",
-      text: "000000",
-    },
-  },
-  {
-    id: 8,
-    name: "Zinc Cart",
-    location: {
-      room: "LC2",
-      floor: "2",
-    },
-    color: {
-      bg: "655b55",
-      text: "ffffff",
-    },
-  },
-
-  // Main floor
-
-  {
-    id: 9,
-    name: "Poseidon Cart",
-    location: {
-      room: "Band",
-      floor: "1",
-    },
-    color: {
-      bg: "133955",
-      text: "ffffff",
-    },
-  },
-  {
-    id: 10,
-    name: "Hades Cart",
-    location: {
-      room: "1601",
-      floor: "1",
-    },
-    color: {
-      bg: "615316",
-      text: "ffffff",
-    },
-  },
-] as const;
-
-export const FloorMap = [
-  {
-    name: "Main Floor",
-    carts: CartMap.filter((cart) => cart.location.floor === "1"),
+    name: "Third Floor",
+    carts: [
+      {
+        id: 1,
+        name: "Red Cart",
+        location: {
+          room: "LC3",
+          floor: "3",
+        },
+        color: {
+          bg: "ff0000",
+          text: "000000",
+        },
+      },
+      {
+        id: 2,
+        name: "Green Cart",
+        location: {
+          room: "LC3",
+          floor: "3",
+        },
+        color: {
+          bg: "00ff00",
+          text: "000000",
+        },
+      },
+      {
+        id: 3,
+        name: "Blue Cart",
+        location: {
+          room: "LC3",
+          floor: "3",
+        },
+        color: {
+          bg: "0000ff",
+          text: "ffffff",
+        },
+      },
+      {
+        id: 4,
+        name: "Yellow Cart",
+        location: {
+          room: "LC3",
+          floor: "3",
+        },
+        color: {
+          bg: "ffff00",
+          text: "000000",
+        },
+      },
+    ],
   },
   {
     name: "Second Floor",
-    carts: CartMap.filter((cart) => cart.location.floor === "2"),
+    carts: [
+      {
+        id: 5,
+        name: "Gold Cart",
+        location: {
+          room: "LC2",
+          floor: "2",
+        },
+        color: {
+          bg: "f0c434",
+          text: "000000",
+        },
+      },
+      {
+        id: 6,
+        name: "Silver Cart",
+        location: {
+          room: "LC2",
+          floor: "2",
+        },
+        color: {
+          bg: "cad3d7",
+          text: "000000",
+        },
+      },
+      {
+        id: 7,
+        name: "Bronze Cart",
+        location: {
+          room: "LC2",
+          floor: "2",
+        },
+        color: {
+          bg: "c67d1c",
+          text: "000000",
+        },
+      },
+      {
+        id: 8,
+        name: "Zinc Cart",
+        location: {
+          room: "LC2",
+          floor: "2",
+        },
+        color: {
+          bg: "655b55",
+          text: "ffffff",
+        },
+      },
+    ],
   },
   {
-    name: "Third Floor",
-    carts: CartMap.filter((cart) => cart.location.floor === "3"),
+    name: "Main Floor",
+    carts: [
+      {
+        id: 9,
+        name: "Poseidon Cart",
+        location: {
+          room: "1601",
+          floor: "1",
+        },
+        color: {
+          bg: "133955",
+          text: "ffffff",
+        },
+      },
+      {
+        id: 10,
+        name: "Hades Cart",
+        location: {
+          room: "1601",
+          floor: "1",
+        },
+        color: {
+          bg: "615316",
+          text: "ffffff",
+        },
+      },
+    ],
   },
-] as const;
+];

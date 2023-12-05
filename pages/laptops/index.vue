@@ -2,7 +2,7 @@
 import { FloorMap } from "@/data/mapping";
 const router = useRouter();
 
-const floors = ref(FloorMap.toReversed());
+const floors = ref(FloorMap);
 </script>
 
 <template>

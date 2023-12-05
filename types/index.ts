@@ -1,13 +1,17 @@
-import { z } from "zod";
+export interface Cart {
+  id: number;
+  name: string;
+  location: {
+    room: string;
+    floor: string;
+  };
+  color: {
+    bg: string;
+    text: string;
+  };
+}
 
-export const Cart = z.object({
-  id: z.number().min(1).max(10),
-  name: z.string(),
-  location: z.string(),
-  color: z.object({
-    bg: z.string(),
-    text: z.string(),
-  }),
-});
-
-export type Cart = z.infer<typeof Cart>;
+export interface Floor {
+  name: string;
+  carts: Cart[];
+}
