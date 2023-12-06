@@ -7,7 +7,8 @@ import type {
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/vue3";
-import { blocks } from "~/data/mapping";
+import { blocks } from "@/data/mapping";
+import type { NewEvent } from "@/types";
 
 definePageMeta({
   title: "Booking",
@@ -18,36 +19,22 @@ definePageMeta({
 const router = useRouter();
 const route = useRoute("laptops-cart-id");
 
-const dayjs = useDayjs();
+const dialog = ref<HTMLDialogElement | null>(null);
 
 const prompts = ref({
   create: false,
   delete: false,
 });
 
+const { width, height } = useWindowSize();
+
 const calendar = ref();
 
-const metaData = ref<DateSelectArg>();
+const metaData = ref<DateSelectArg | null>(null);
 
 const targetPose = ref({
   x: 0,
   y: 0,
-});
-
-const newEvent = ref<{
-  name: string;
-  room: number | null;
-  block: {
-    start: string;
-    end: string;
-  };
-}>({
-  name: "",
-  room: null,
-  block: {
-    start: "",
-    end: "",
-  },
 });
 
 const handleDateSelect = (selectInfo: DateSelectArg) => {
@@ -55,23 +42,26 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
 
   if (!selectInfo.jsEvent) return;
 
-  // set to the mouse position
-  targetPose.value.x = selectInfo.jsEvent.x - selectInfo.jsEvent.offsetX;
-  targetPose.value.y = selectInfo.jsEvent.y - selectInfo.jsEvent.offsetY;
+  if (screen.width > 768) {
+    targetPose.value.x = selectInfo.jsEvent.x - selectInfo.jsEvent.offsetX;
+    targetPose.value.y = selectInfo.jsEvent.y - selectInfo.jsEvent.offsetY;
 
-  targetPose.value.x = Math.min(
-    Math.max(targetPose.value.x, 0),
-    window.innerWidth - 350
-  );
-  targetPose.value.y = Math.min(
-    Math.max(targetPose.value.y, 0),
-    window.innerHeight - 550
-  );
+    targetPose.value.x = Math.min(
+      Math.max(targetPose.value.x, 0),
+      window.innerWidth - 350
+    );
+    targetPose.value.y = Math.min(
+      Math.max(targetPose.value.y, 0),
+      window.innerHeight - 550
+    );
 
-  prompts.value.create =
-    metaData.value?.startStr === selectInfo.startStr
-      ? !prompts.value.create
-      : true;
+    prompts.value.create =
+      metaData.value?.startStr === selectInfo.startStr
+        ? !prompts.value.create
+        : true;
+  } else {
+    dialog.value?.showModal();
+  }
 
   calendarApi.unselect(); // clear date selection
 
@@ -101,118 +91,58 @@ const calendarOptions = ref<CalendarOptions>({
   eventClick: handleEventClick,
   height: "50rem",
   windowResizeDelay: 0,
-  selectLongPressDelay: 200,
+  selectLongPressDelay: 0,
 });
 
-const addEvent = (e: SubmitEvent) => {
-  e.preventDefault();
-  if (
-    !newEvent.value.name ||
-    !newEvent.value.room ||
-    !newEvent.value.block.start ||
-    !newEvent.value.block.end
-  )
-    return;
+const addEvent = (data: NewEvent) => {
+  if (!data.name || !data.room || !data.block.start || !data.block.end) return;
 
-  const startBlock = blocks[newEvent.value.block.start];
-  const endBlock = blocks[newEvent.value.block.end];
+  const startBlock = blocks[data.block.start];
+  const endBlock = blocks[data.block.end];
 
   const calendarApi = calendar.value?.getApi();
 
   calendarApi.addEvent({
-    title: `${newEvent.value.name} - ${newEvent.value.room}`,
+    title: `${data.name} - ${data.room}`,
     start: `${metaData.value?.startStr}T${startBlock.start}`,
     end: `${metaData.value?.startStr}T${endBlock.end}`,
     allDay: false,
     extendedProps: {
-      room: newEvent.value.room,
-      block: `${newEvent.value.block.start} ${
-        newEvent.value.block.end === newEvent.value.block.start
+      room: data.room,
+      block: `${data.block.start} ${
+        data.block.end === data.block.start
           ? ""
-          : "- " + newEvent.value.block.end.split(" ")[1]
+          : "- " + data.block.end.split(" ")[1]
       }`,
     },
   });
 
-  clear();
-};
-
-const clear = () => {
-  newEvent.value = {
-    name: "",
-    room: null,
-    block: {
-      start: "",
-      end: "",
-    },
-  };
   prompts.value.create = false;
-  prompts.value.delete = false;
+  dialog.value?.close();
 };
 </script>
 
 <template>
   <div class="relative w-full">
+    <dialog ref="dialog" class="modal">
+      <NewBooking
+        :metaData="metaData"
+        @submit="addEvent"
+        @cancel="dialog?.close()"
+        class="modal-box"
+      />
+    </dialog>
     <Transition>
       <div
+        :style="`top: ${targetPose.y}px; left: ${targetPose.x}px`"
         class="absolute z-50 duration-200 ease-in-out transition-all"
-        :style="`top: ${targetPose.y}px; left: ${targetPose.x}px;`"
         v-if="prompts.create"
       >
-        <div class="card bg-base-300 border" id="newEventPrompt">
-          <div class="card-body">
-            <div class="form-control gap-2">
-              <h2 class="text-2xl font-bold">New booking</h2>
-              <span>{{ dayjs(metaData?.start).format("dddd, MMMM DD") }}</span>
-              <!-- Info -->
-              <InputBasic
-                type="text"
-                placeholder="Name"
-                v-model="newEvent.name"
-              />
-              <InputBasic
-                type="number"
-                placeholder="Room Number"
-                v-model="newEvent.room"
-              />
-
-              <!-- Blocks -->
-              <InputDropdown
-                :options="Object.keys(blocks)"
-                placeholder="Start block"
-                v-model="newEvent.block.start"
-                @change="newEvent.block.end = newEvent.block.start"
-              />
-              <InputDropdown
-                :options="Object.keys(blocks)"
-                placeholder="End block"
-                v-model="newEvent.block.end"
-              />
-              <div class="grid grid-cols-2 gap-2">
-                <Button
-                  class="btn-success w-full"
-                  @click="addEvent"
-                  tooltip="Confirm"
-                  :disabled="
-                    !newEvent.name ||
-                    !newEvent.room ||
-                    !newEvent.block.start ||
-                    !newEvent.block.end
-                  "
-                >
-                  <Icon name="mdi:check" />
-                </Button>
-                <Button
-                  class="btn-error w-full"
-                  @click="clear()"
-                  tooltip="cancel"
-                >
-                  <Icon name="mdi:cancel" />
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <NewBooking
+          :metaData="metaData"
+          @submit="addEvent"
+          @cancel="prompts.create = false"
+        />
       </div>
     </Transition>
 
