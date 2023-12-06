@@ -1,15 +1,16 @@
 <script setup lang="ts">
 import type { Laptop } from "@/types";
 
-const randomIntFromInterval = (min: number, max: number) => {
-  // min and max included
-  return Math.floor(Math.random() * (max - min + 1) + min);
+const generateRandomNumber = (max: number, pad: number) => {
+  const num = Math.floor(Math.random() * max) + 1;
+  return Number(num.toString().padStart(pad, "0"));
 };
 
 const laptops = ref<Laptop[]>(
   Array.from({ length: 10 }, () => ({
-    id: `L802WL2300${randomIntFromInterval(0, 10)}`,
-    cart: 1,
+    id: `L802WL230${generateRandomNumber(200, 3)}`,
+    cart: generateRandomNumber(4, 0),
+    exists: true,
   }))
 );
 </script>
@@ -20,7 +21,7 @@ const laptops = ref<Laptop[]>(
       <tr>
         <th>Cart</th>
         <th>ID</th>
-        <th></th>
+        <th>Exists</th>
       </tr>
     </thead>
     <tbody>
@@ -32,9 +33,16 @@ const laptops = ref<Laptop[]>(
             type="radio"
             :name="`radio-${i}`"
             class="radio radio-success"
-            checked
+            v-model="laptop.exists"
+            :value="true"
           />
-          <input type="radio" :name="`radio-${i}`" class="radio radio-error" />
+          <input
+            type="radio"
+            :name="`radio-${i}`"
+            class="radio radio-error"
+            :value="false"
+            v-model="laptop.exists"
+          />
         </td>
       </tr>
     </tbody>

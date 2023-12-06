@@ -1,6 +1,7 @@
 export interface Laptop {
   id: string;
   cart: number;
+  exists: boolean;
 }
 
 export interface Cart {
