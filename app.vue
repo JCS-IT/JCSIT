@@ -35,7 +35,7 @@ const breadcrumbs = computed(() => {
         </div>
       </div>
     </header>
-    <main class="p-0 sm:p-3">
+    <main class="flex justify-center p-0 sm:p-3">
       <Suspense>
         <NuxtLayout>
           <NuxtPage />
