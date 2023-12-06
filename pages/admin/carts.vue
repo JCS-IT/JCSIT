@@ -19,11 +19,19 @@ const laptops = ref<Laptop[]>(
 const missing = computed(() => {
   return laptops.value.filter((laptop) => !laptop.exists);
 });
+
+const search = ref("");
 </script>
 
 <template>
   <div class="flex gap-2 flex-wrap">
     <div class="flex-grow">
+      <input
+        class="input input-bordered mb-2"
+        type="text"
+        v-model="search"
+        placeholder="Search"
+      />
       <h2>Carts</h2>
       <table class="table table-zebra">
         <thead>
@@ -34,7 +42,11 @@ const missing = computed(() => {
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(laptop, i) in laptops">
+          <tr
+            v-for="laptop in laptops.filter((i) =>
+              i.id.toLowerCase().includes(search.toLowerCase())
+            )"
+          >
             <td>{{ laptop.cart }}</td>
             <td>{{ laptop.id }}</td>
             <td class="flex">
