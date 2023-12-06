@@ -35,26 +35,17 @@ const breadcrumbs = computed(() => {
         </div>
       </div>
     </header>
-    <main class="flex-grow">
-      <div class="flex flex-col justify-between h-full">
-        <div id="content" class="flex-grow">
-          <div class="flex justify-center flex-grow p-0 sm:p-3">
-            <div id="overlay" class="absolute z-[5]"></div>
-            <Suspense>
-              <NuxtLayout>
-                <NuxtPage />
-              </NuxtLayout>
-              <template #fallback>
-                <div
-                  class="grid justify-center items-center h-full overflow-hidden"
-                >
-                  <span class="loading loading-lg loading-infinity" />
-                </div>
-              </template>
-            </Suspense>
+    <main class="p-0 sm:p-3">
+      <Suspense>
+        <NuxtLayout>
+          <NuxtPage />
+        </NuxtLayout>
+        <template #fallback>
+          <div class="grid justify-center items-center h-full overflow-hidden">
+            <span class="loading loading-lg loading-infinity" />
           </div>
-        </div>
-      </div>
+        </template>
+      </Suspense>
     </main>
   </div>
 </template>
