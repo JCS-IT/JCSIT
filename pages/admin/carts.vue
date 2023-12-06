@@ -12,41 +12,59 @@ const laptops = ref<Laptop[]>(
       .toString()
       .padStart(2, "0")}0${generateRandomNumber(200)}`,
     cart: Math.floor(Math.random() * 3) + 1,
-    exists: true,
+    exists: false,
   }))
 );
+
+const missing = computed(() => {
+  return laptops.value.filter((laptop) => !laptop.exists);
+});
 </script>
 
 <template>
-  <table class="table table-zebra">
-    <thead>
-      <tr>
-        <th>Cart</th>
-        <th>ID</th>
-        <th>Exists (Y/N)</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(laptop, i) in laptops">
-        <td>{{ laptop.cart }}</td>
-        <td>{{ laptop.id }}</td>
-        <td class="flex gap-1">
-          <input
-            type="radio"
-            :name="`radio-${i}`"
-            class="radio radio-success"
-            v-model="laptop.exists"
-            :value="true"
-          />
-          <input
-            type="radio"
-            :name="`radio-${i}`"
-            class="radio radio-error"
-            :value="false"
-            v-model="laptop.exists"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="flex gap-2 flex-wrap">
+    <div class="flex-grow">
+      <h2>Carts</h2>
+      <table class="table table-zebra">
+        <thead>
+          <tr>
+            <th>Cart</th>
+            <th>ID</th>
+            <th>Exists</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(laptop, i) in laptops">
+            <td>{{ laptop.cart }}</td>
+            <td>{{ laptop.id }}</td>
+            <td class="flex">
+              <input
+                class="checkbox checkbox-sm"
+                type="checkbox"
+                v-model="laptop.exists"
+              />
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div v-if="missing.length > 0" class="flex-grow">
+      <h2>Missing</h2>
+      <table class="table table-zebra">
+        <thead>
+          <tr>
+            <th>Cart</th>
+            <th>ID</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(laptop, i) in missing">
+            <td>{{ laptop.cart }}</td>
+            <td>{{ laptop.id }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 </template>
