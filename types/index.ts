@@ -1,3 +1,8 @@
+export interface Laptop {
+  id: string;
+  cart: number;
+}
+
 export interface Cart {
   id: number;
   name: string;
