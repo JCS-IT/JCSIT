@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import type { Laptop } from "@/types";
 
-const generateRandomNumber = (max: number, pad: number) => {
+const generateRandomNumber = (max: number) => {
   const num = Math.floor(Math.random() * max) + 1;
-  return Number(num.toString().padStart(pad, "0"));
+  return num.toString().padStart(3, "0");
 };
 
 const laptops = ref<Laptop[]>(
   Array.from({ length: 10 }, () => ({
-    id: `L802WL230${generateRandomNumber(200, 3)}`,
-    cart: generateRandomNumber(4, 0),
+    id: `L802WL${(Math.floor(Math.random() * 6) + 18)
+      .toString()
+      .padStart(2, "0")}0${generateRandomNumber(200)}`,
+    cart: Math.floor(Math.random() * 3) + 1,
     exists: true,
   }))
 );
@@ -21,7 +23,7 @@ const laptops = ref<Laptop[]>(
       <tr>
         <th>Cart</th>
         <th>ID</th>
-        <th>Exists</th>
+        <th>Exists (Y/N)</th>
       </tr>
     </thead>
     <tbody>
