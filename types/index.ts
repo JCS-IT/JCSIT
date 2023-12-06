@@ -15,3 +15,12 @@ export interface Floor {
   name: string;
   carts: Cart[];
 }
+
+export interface NewEvent {
+  name: string;
+  room: number | null;
+  block: {
+    start: string;
+    end: string;
+  };
+}
