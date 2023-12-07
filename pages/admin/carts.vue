@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { Laptop } from "@/types";
+import type { JokeRes, Laptop } from "@/types";
 
 const tab = ref(0);
 
@@ -23,7 +23,7 @@ const laptops = ref<Laptop[]>(
 const search = ref("");
 
 const filteredLaptops = computed(() => {
-  // ID: <L|E><SCHOOL NUMBER><TYPE: WL, ML><YEAR yy><NUMBER 0000>
+  // ID: <L|E><SCHOOL NUMBER><TYPE: WL, ML, MD, WD><YEAR yy><NUMBER 0000>
 
   return (
     laptops.value
@@ -40,13 +40,12 @@ const filteredLaptops = computed(() => {
           ? laptop.id
               .split("L802")[1]
               .slice(2, 4)
-              .includes(search.value.split("year:")[1].slice(0, 1))
+              .includes(search.value.split("year:")[1].slice(0, 2))
           : laptop.id
       )
       // Everything else
       .filter((laptop) =>
         laptop.id.toLowerCase().includes(
-          // remove any modifiers from the search
           search.value
             .toLowerCase()
             .replace(/cart:\d+|year:\d+/g, "")
@@ -59,6 +58,15 @@ const filteredLaptops = computed(() => {
 const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
   // Keep `itemHeight` in sync with the item's row.
   itemHeight: 22,
+});
+
+const joke = useQuery<JokeRes>({
+  queryKey: ["joke"],
+  queryFn: () =>
+    fetch("https://v2.jokeapi.dev/joke/Programming?type=single").then((res) =>
+      res.json()
+    ),
+  refetchInterval: () => 1000 * 60 * 60 * 24,
 });
 </script>
 
@@ -134,6 +142,13 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
             >
               <IconCSS name="arcticons:bad-piggies" size="150" />
               <span class="text-2xl">No results found</span>
+              <span> (A a piggy stole them!) </span>
+              <span
+                v-if="joke.data.value?.joke"
+                class="mt-5 p-2 shadow-xl mx-6 border rounded-xl dark:border-[#383f47]"
+              >
+                {{ joke.data.value.joke }}
+              </span>
             </div>
           </div>
         </div>

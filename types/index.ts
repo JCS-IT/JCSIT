@@ -1,3 +1,5 @@
+export * from "./funny";
+
 export interface Laptop {
   id: string;
   cart: number;

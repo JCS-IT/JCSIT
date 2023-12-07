@@ -66,6 +66,7 @@ export default defineNuxtConfig({
     "@nuxtjs/google-fonts",
     "dayjs-nuxt",
     // "nuxt-vuefire",
+    "@hebilicious/vue-query-nuxt",
   ],
 
   googleFonts: {
