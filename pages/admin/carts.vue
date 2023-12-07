@@ -9,8 +9,10 @@ const generateRandomNumber = (max: number) => {
 };
 
 const laptops = ref<Laptop[]>(
-  Array.from({ length: 10 }, () => ({
-    id: `L802WL${(Math.floor(Math.random() * 6) + 18)
+  Array.from({ length: 1000 }, () => ({
+    id: `L802${["WL", "ML"][Math.floor(Math.random() * 2)]}${(
+      Math.floor(Math.random() * 6) + 18
+    )
       .toString()
       .padStart(2, "0")}0${generateRandomNumber(200)}`,
     cart: Math.floor(Math.random() * 3) + 1,
@@ -18,21 +20,45 @@ const laptops = ref<Laptop[]>(
   })).sort((a, b) => a.cart - b.cart)
 );
 
-const missing = computed(() => {
-  return laptops.value.filter((laptop) => !laptop.exists);
-});
-
 const search = ref("");
 
 const filteredLaptops = computed(() => {
-  if (search.value.includes("cart:")) {
-    const cart = search.value.split("cart:")[1];
-    return laptops.value.filter((laptop) => laptop.cart == parseInt(cart));
-  } else {
-    return laptops.value.filter((laptop) =>
-      laptop.id.toLowerCase().includes(search.value.toLowerCase())
-    );
-  }
+  // ID: <L|E><SCHOOL NUMBER><TYPE: WL, ML><YEAR yy><NUMBER 0000>
+
+  return (
+    laptops.value
+      // Filter by cart
+      .filter((laptop) =>
+        search.value.toLowerCase().includes("cart:")
+          ? laptop.cart ==
+            parseInt(search.value.toLowerCase().split("cart:")[1])
+          : laptop.cart
+      )
+      // Filter by year
+      .filter((laptop) =>
+        search.value.includes("year:")
+          ? laptop.id
+              .split("L802")[1]
+              .slice(2, 4)
+              .includes(search.value.split("year:")[1].slice(0, 1))
+          : laptop.id
+      )
+      // Everything else
+      .filter((laptop) =>
+        laptop.id.toLowerCase().includes(
+          // remove any modifiers from the search
+          search.value
+            .toLowerCase()
+            .replace(/cart:\d+|year:\d+/g, "")
+            .replace(" ", "")
+        )
+      )
+  );
+});
+
+const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
+  // Keep `itemHeight` in sync with the item's row.
+  itemHeight: 22,
 });
 </script>
 
@@ -55,63 +81,95 @@ const filteredLaptops = computed(() => {
       Missing
     </button>
   </div>
-  <div class="flex gap-2 flex-wrap">
-    <div class="flex-grow" v-if="tab == 0">
-      <input
-        class="input input-bordered mb-2 w-full"
-        type="text"
-        v-model="search"
-        placeholder="Search"
-      />
-      <table class="table table-zebra">
-        <thead>
-          <tr>
-            <th>Cart</th>
-            <th>ID</th>
-            <th>Exists</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="laptop in filteredLaptops">
-            <td>{{ laptop.cart }}</td>
-            <td>{{ laptop.id }}</td>
-            <td class="flex">
+
+  <div v-if="tab == 0" class="max-sm:w-[80vw] w-[22rem]">
+    <input
+      class="input input-bordered mb-2 w-full"
+      type="text"
+      v-model="search"
+      placeholder="Search"
+    />
+    <div class="w-full join join-vertical">
+      <div
+        class="grid px-1 border join-item"
+        style="grid-template-columns: 1fr 2fr 1fr"
+      >
+        <span>Cart</span>
+        <span class="pl-5">ID</span>
+        <span>Exists</span>
+      </div>
+      <div
+        v-bind="containerProps"
+        class="h-[65vh] shadow-inner join-item border"
+      >
+        <div v-bind="wrapperProps">
+          <div
+            v-for="item in list"
+            :key="item.index"
+            class="h-[22px] grid gap-2 even:bg-base-200 px-2 w-full"
+            style="grid-template-columns: 1fr 4fr 1fr"
+          >
+            <span class="text-center">
+              {{ item.data.cart }}
+            </span>
+            <span class="text-center">
+              {{ item.data.id }}
+            </span>
+            <span class="text-center">
               <input
                 class="checkbox checkbox-sm"
+                :class="{
+                  'checkbox-success': item.data.exists,
+                  'checkbox-error': !item.data.exists,
+                }"
                 type="checkbox"
-                v-model="laptop.exists"
+                v-model="item.data.exists"
               />
-            </td>
-          </tr>
-          <tr v-if="filteredLaptops.length == 0">
-            <td colspan="3" class="text-center">
-              <h2>No matches</h2>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div v-if="tab == 1" class="flex-grow">
-      <div v-if="missing.length > 0">
-        <h2>Missing</h2>
-        <table class="table table-zebra">
-          <thead>
-            <tr>
-              <th>Cart</th>
-              <th>ID</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(laptop, i) in missing">
-              <td>{{ laptop.cart }}</td>
-              <td>{{ laptop.id }}</td>
-            </tr>
-          </tbody>
-        </table>
+            </span>
+          </div>
+          <div>
+            <div
+              v-if="list.length == 0"
+              class="flex justify-center items-center h-full mt-5"
+            >
+              <span class="text-2xl">No results found</span>
+            </div>
+          </div>
+        </div>
       </div>
-      <div v-else>
-        <h2>No missing laptops</h2>
+    </div>
+  </div>
+
+  <div v-if="tab == 1" class="max-sm:w-[80vw] w-[22rem]">
+    <div class="flex gap-3 my-3">
+      <h2 class="font-bold">Total Missing:</h2>
+      <span>{{ laptops.filter((laptop) => !laptop.exists).length }}</span>
+    </div>
+    <div class="join join-vertical w-full">
+      <div
+        class="grid px-1 border join-item"
+        style="grid-template-columns: 1fr 2fr"
+      >
+        <span>Cart</span>
+        <span class="pl-5">ID</span>
+      </div>
+
+      <div
+        class="h-[65vh] overflow-y-scroll mt-4 shadow-inner border join-item"
+      >
+        <div
+          v-for="item in laptops.filter((laptop) => !laptop.exists)"
+          :key="item.id"
+          class="h-[22px] grid gap-2 even:bg-base-200 px-2 w-full"
+          style="grid-template-columns: 1fr 4fr"
+        >
+          <span class="text-center">
+            {{ item.cart }}
+          </span>
+          <span class="text-center">
+            {{ item.id }}
+          </span>
+        </div>
       </div>
     </div>
   </div>
