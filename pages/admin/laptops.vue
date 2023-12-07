@@ -16,14 +16,14 @@ const laptops = ref<Laptop[]>(
       .toString()
       .padStart(2, "0")}0${generateRandomNumber(200)}`,
     cart: Math.floor(Math.random() * 3) + 1,
-    exists: false,
+    exists: true,
   })).sort((a, b) => a.cart - b.cart)
 );
 
 const search = ref("");
 
 const filteredLaptops = computed(() => {
-  // ID: <L|E><SCHOOL NUMBER><TYPE: WL, ML, MD, WD><YEAR yy><NUMBER 0000>
+  // ID: <L|E><SCHOOL NUMBER><TYPE: WL|ML|MD|WD><YEAR yy><NUMBER 0000>
 
   return (
     laptops.value
@@ -40,7 +40,7 @@ const filteredLaptops = computed(() => {
           ? laptop.id
               .split("L802")[1]
               .slice(2, 4)
-              .includes(search.value.split("year:")[1].slice(0, 2))
+              .match(search.value.split("year:")[1].slice(0, 2))
           : laptop.id
       )
       // Everything else
@@ -61,7 +61,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
 });
 
 const joke = useQuery<JokeRes>({
-  queryKey: ["joke"],
+  queryKey: ["PgmJoke"],
   queryFn: () =>
     fetch("https://v2.jokeapi.dev/joke/Programming?type=single").then((res) =>
       res.json()
@@ -78,7 +78,7 @@ const joke = useQuery<JokeRes>({
       :class="{ 'tab-active': tab == 0 }"
       @click="tab = 0"
     >
-      Carts
+      Laptops
     </button>
     <button
       role="tab"
@@ -108,7 +108,7 @@ const joke = useQuery<JokeRes>({
       </div>
       <div
         v-bind="containerProps"
-        class="h-[65vh] shadow-inner join-item border dark:border-[#383f47]"
+        class="max-h-[65vh] shadow-inner join-item border dark:border-[#383f47]"
       >
         <div v-bind="wrapperProps">
           <div
@@ -154,6 +154,12 @@ const joke = useQuery<JokeRes>({
         </div>
       </div>
     </div>
+    <button
+      class="btn btn-block mt-2"
+      @click="laptops.forEach((i) => (i.exists = false))"
+    >
+      Reset
+    </button>
   </div>
 
   <div v-if="tab == 1" class="max-sm:w-[80vw] w-[22rem]">
