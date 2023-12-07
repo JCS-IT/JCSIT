@@ -91,7 +91,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
     />
     <div class="w-full join join-vertical">
       <div
-        class="grid px-1 border join-item"
+        class="grid px-1 border join-item dark:border-[#383f47]"
         style="grid-template-columns: 1fr 2fr 1fr"
       >
         <span>Cart</span>
@@ -100,7 +100,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
       </div>
       <div
         v-bind="containerProps"
-        class="h-[65vh] shadow-inner join-item border"
+        class="h-[65vh] shadow-inner join-item border dark:border-[#383f47]"
       >
         <div v-bind="wrapperProps">
           <div
@@ -130,8 +130,9 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
           <div>
             <div
               v-if="list.length == 0"
-              class="flex justify-center items-center h-full mt-5"
+              class="flex flex-col justify-center items-center h-full mt-5"
             >
+              <IconCSS name="arcticons:bad-piggies" size="150" />
               <span class="text-2xl">No results found</span>
             </div>
           </div>
@@ -147,7 +148,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
     </div>
     <div class="join join-vertical w-full">
       <div
-        class="grid px-1 border join-item"
+        class="grid px-1 border join-item dark:border-[#383f47]"
         style="grid-template-columns: 1fr 2fr"
       >
         <span>Cart</span>
@@ -155,7 +156,7 @@ const { list, containerProps, wrapperProps } = useVirtualList(filteredLaptops, {
       </div>
 
       <div
-        class="h-[65vh] overflow-y-scroll mt-4 shadow-inner border join-item"
+        class="h-[65vh] overflow-y-scroll mt-4 shadow-inner border join-item dark:border-[#383f47]"
       >
         <div
           v-for="item in laptops.filter((laptop) => !laptop.exists)"
