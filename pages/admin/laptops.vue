@@ -113,7 +113,7 @@ const joke = useQuery<JokeRes>({
         <div v-bind="wrapperProps">
           <div
             v-for="item in list"
-            :key="item.index"
+            :key="item.data.id"
             class="h-[22px] grid gap-2 even:bg-base-200 px-2 w-full"
             style="grid-template-columns: 1fr 4fr 1fr"
           >
