@@ -17,7 +17,7 @@ const laptops = ref<Laptop[]>(
       .padStart(2, "0")}0${generateRandomNumber(200)}`,
     cart: Math.floor(Math.random() * 3) + 1,
     exists: true,
-  })).sort((a, b) => a.cart - b.cart)
+  })).sort((a, b) => a.cart - b.cart),
 );
 
 const search = ref("");
@@ -32,7 +32,7 @@ const filteredLaptops = computed(() => {
         search.value.toLowerCase().includes("cart:")
           ? laptop.cart ==
             parseInt(search.value.toLowerCase().split("cart:")[1])
-          : laptop.cart
+          : laptop.cart,
       )
       // Filter by year
       .filter((laptop) =>
@@ -41,7 +41,7 @@ const filteredLaptops = computed(() => {
               .split("L802")[1]
               .slice(2, 4)
               .match(search.value.split("year:")[1].slice(0, 2))
-          : laptop.id
+          : laptop.id,
       )
       // Everything else
       .filter((laptop) =>
@@ -49,8 +49,8 @@ const filteredLaptops = computed(() => {
           search.value
             .toLowerCase()
             .replace(/cart:\d+|year:\d+/g, "")
-            .replace(" ", "")
-        )
+            .replace(" ", ""),
+        ),
       )
   );
 });
@@ -64,7 +64,7 @@ const joke = useQuery<JokeRes>({
   queryKey: ["PgmJoke"],
   queryFn: () =>
     fetch("https://v2.jokeapi.dev/joke/Programming?type=single").then((res) =>
-      res.json()
+      res.json(),
     ),
   refetchInterval: () => 1000 * 60 * 60 * 24,
 });
