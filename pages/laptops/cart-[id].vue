@@ -3,6 +3,7 @@ import type {
   CalendarOptions,
   DateSelectArg,
   EventClickArg,
+  CalendarApi,
 } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
@@ -26,8 +27,6 @@ const prompts = ref({
   delete: false,
 });
 
-const { width, height } = useWindowSize();
-
 const calendar = ref();
 
 const metaData = ref<DateSelectArg | null>(null);
@@ -48,11 +47,11 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
 
     targetPose.value.x = Math.min(
       Math.max(targetPose.value.x, 0),
-      window.innerWidth - 350
+      window.innerWidth - 350,
     );
     targetPose.value.y = Math.min(
       Math.max(targetPose.value.y, 0),
-      window.innerHeight - 550
+      window.innerHeight - 520,
     );
 
     prompts.value.create =
@@ -71,7 +70,7 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
 const handleEventClick = (clickInfo: EventClickArg) => {
   if (
     confirm(
-      `Are you sure you want to delete the event '${clickInfo.event.title}'`
+      `Are you sure you want to delete the event '${clickInfo.event.title}'`,
     )
   ) {
     clickInfo.event.remove();
@@ -100,7 +99,7 @@ const addEvent = (data: NewEvent) => {
   const startBlock = blocks[data.block.start];
   const endBlock = blocks[data.block.end];
 
-  const calendarApi = calendar.value?.getApi();
+  const calendarApi: CalendarApi = calendar.value?.getApi();
 
   calendarApi.addEvent({
     title: `${data.name} - ${data.room}`,
