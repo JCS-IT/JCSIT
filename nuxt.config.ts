@@ -87,8 +87,8 @@ export default defineNuxtConfig({
       projectId: "jcs-it",
       storageBucket: "jcs-it.appspot.com",
       messagingSenderId: "450949611405",
-      appId: "1:450949611405:web:eb2c030caccf5c2b2f47c4",
-      measurementId: "G-DL9690XSCT",
+      appId: "1:450949611405:web:5eafd9b0a54ee6ba2f47c4",
+      measurementId: "G-BKKN922HM5",
     },
     auth: true,
     appCheck: {
@@ -98,7 +98,7 @@ export default defineNuxtConfig({
       key: "6LdVYS8pAAAAAEYTKcye0IEHJ4WYqaPHocTN4Bpf",
     },
     emulators: {
-      enabled: true,
+      enabled: false,
     },
   },
 });

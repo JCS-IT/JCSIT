@@ -10,6 +10,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/vue3";
 import { blocks } from "@/data/mapping";
 import type { NewEvent } from "@/types";
+import { updateDoc, doc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 definePageMeta({
   title: "Booking",
@@ -86,11 +87,32 @@ const calendarOptions = ref<CalendarOptions>({
   selectable: true,
   selectMirror: true,
   dayMaxEvents: true,
+  defaultAllDay: false,
   select: handleDateSelect,
   eventClick: handleEventClick,
   height: "50rem",
   windowResizeDelay: 0,
   selectLongPressDelay: 0,
+  eventAdd: async (e) => {
+    await updateDoc(doc(useFirestore(), "global/carts"), {
+      [`cart-${route.params.id}`]: arrayUnion({
+        title: e.event.title,
+        start: e.event.startStr,
+        end: e.event.endStr,
+        extendedProps: e.event.extendedProps,
+      }),
+    });
+  },
+  eventRemove: async (e) => {
+    await updateDoc(doc(useFirestore(), "global/carts"), {
+      [`cart-${route.params.id}`]: arrayRemove({
+        title: e.event.title,
+        start: e.event.startStr,
+        end: e.event.endStr,
+        extendedProps: e.event.extendedProps,
+      }),
+    });
+  },
 });
 
 const addEvent = (data: NewEvent) => {
@@ -105,7 +127,6 @@ const addEvent = (data: NewEvent) => {
     title: `${data.name} - ${data.room}`,
     start: `${metaData.value?.startStr}T${startBlock.start}`,
     end: `${metaData.value?.startStr}T${endBlock.end}`,
-    allDay: false,
     extendedProps: {
       room: data.room,
       block: `${data.block.start} ${
