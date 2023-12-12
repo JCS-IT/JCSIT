@@ -108,7 +108,7 @@ const joke = useQuery<JokeRes>({
       </div>
       <div
         v-bind="containerProps"
-        class="max-h-[65vh] shadow-inner join-item border dark:border-[#383f47]"
+        class="max-h-[65vh] min-h-[45vh] shadow-inner join-item border dark:border-[#383f47]"
       >
         <div v-bind="wrapperProps">
           <div
@@ -135,10 +135,10 @@ const joke = useQuery<JokeRes>({
               />
             </span>
           </div>
-          <div>
+          <div class="h-full">
             <div
               v-if="list.length == 0"
-              class="flex flex-col justify-center items-center h-full mt-5"
+              class="flex flex-col justify-center items-center mt-5"
             >
               <IconCSS name="arcticons:bad-piggies" size="150" />
               <span class="text-2xl">No results found</span>
