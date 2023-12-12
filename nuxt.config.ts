@@ -65,7 +65,7 @@ export default defineNuxtConfig({
     "nuxt-headlessui",
     "@nuxtjs/google-fonts",
     "dayjs-nuxt",
-    // "nuxt-vuefire",
+    "nuxt-vuefire",
     "@hebilicious/vue-query-nuxt",
   ],
 
@@ -76,17 +76,25 @@ export default defineNuxtConfig({
     },
   },
 
-  // vuefire: {
-  //   // config: {},
-  //   // auth: true,
-  //   // appCheck: {
-  //   //   debug: process.env.NODE_ENV !== "production",
-  //   //   isTokenAutoRefreshEnabled: true,
-  //   //   provider: "ReCaptchaV3",
-  //   //   key: "",
-  //   // },
-  //   emulators: {
-  //     enabled: true,
-  //   },
-  // },
+  vuefire: {
+    config: {
+      apiKey: "AIzaSyDCAOfUrMzC7uuV8zpGAsISHdhanU2sIbc",
+      authDomain: "jcs-it.firebaseapp.com",
+      projectId: "jcs-it",
+      storageBucket: "jcs-it.appspot.com",
+      messagingSenderId: "450949611405",
+      appId: "1:450949611405:web:5eafd9b0a54ee6ba2f47c4",
+      measurementId: "G-BKKN922HM5",
+    },
+    auth: true,
+    appCheck: {
+      debug: process.env.NODE_ENV !== "production",
+      isTokenAutoRefreshEnabled: true,
+      provider: "ReCaptchaV3",
+      key: "6LdoYC8pAAAAAJMTV7655xZr___Jp_9Ck9kFR5sc",
+    },
+    emulators: {
+      enabled: true,
+    },
+  },
 });
