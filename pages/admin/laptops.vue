@@ -71,6 +71,7 @@ const joke = useQuery<JokeRes>({
 </script>
 
 <template>
+  <h1>RANDOM DATA. DEMO ONLY</h1>
   <div role="tablist" class="tabs tabs-lifted">
     <button
       role="tab"
