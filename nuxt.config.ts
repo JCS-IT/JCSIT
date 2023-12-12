@@ -22,6 +22,10 @@ export default defineNuxtConfig({
     },
   },
 
+  nitro: {
+    preset: "static",
+  },
+
   vue: {
     defineModel: true,
   },
@@ -83,8 +87,8 @@ export default defineNuxtConfig({
       projectId: "jcs-it",
       storageBucket: "jcs-it.appspot.com",
       messagingSenderId: "450949611405",
-      appId: "1:450949611405:web:5eafd9b0a54ee6ba2f47c4",
-      measurementId: "G-BKKN922HM5",
+      appId: "1:450949611405:web:eb2c030caccf5c2b2f47c4",
+      measurementId: "G-DL9690XSCT",
     },
     auth: true,
     appCheck: {
