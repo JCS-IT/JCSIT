@@ -75,6 +75,7 @@ export default defineNuxtConfig({
 
   googleFonts: {
     preconnect: true,
+    download: false,
     families: {
       Roboto: true,
     },
