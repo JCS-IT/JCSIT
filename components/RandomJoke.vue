@@ -17,6 +17,11 @@ const jokeQuery = useQuery<JokeRes>({
   </button>
   <dialog class="modal" ref="dialog">
     <div class="modal-box card">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+          ✕
+        </button>
+      </form>
       <div class="card-body">
         <div v-if="jokeQuery.data.value && !jokeQuery.data.value?.error">
           <span
@@ -48,5 +53,6 @@ const jokeQuery = useQuery<JokeRes>({
         </p>
       </div>
     </div>
+    <div class="modal-backdrop" @click="dialog?.close()"></div>
   </dialog>
 </template>
