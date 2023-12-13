@@ -1,16 +1,22 @@
 <script setup lang="ts">
+import { blocks } from "@/data/mapping";
+import type { NewEvent } from "@/types";
 import type {
+  CalendarApi,
   CalendarOptions,
   DateSelectArg,
   EventClickArg,
-  CalendarApi,
 } from "@fullcalendar/core";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/vue3";
-import { blocks } from "@/data/mapping";
-import type { NewEvent } from "@/types";
-import { updateDoc, doc, arrayUnion, arrayRemove } from "firebase/firestore";
+import {
+  arrayRemove,
+  arrayUnion,
+  doc,
+  updateDoc,
+  type QueryDocumentSnapshot,
+} from "firebase/firestore";
 
 definePageMeta({
   title: "Booking",
@@ -77,6 +83,42 @@ const handleEventClick = (clickInfo: EventClickArg) => {
     clickInfo.event.remove();
   }
 };
+
+const cartsData = useDocument(
+  doc(useFirestore(), "global/carts").withConverter({
+    fromFirestore: (
+      snap: QueryDocumentSnapshot<{
+        [cart: string]: {
+          title: string;
+          start: string;
+          end: string;
+          extendedProps: {
+            room: string;
+            block: string;
+          };
+        }[];
+      }>,
+    ) => {
+      const api: CalendarApi = calendar.value?.getApi();
+
+      const data = snap.data();
+
+      data[`cart-${route.params.id}`].forEach((event) => {
+        api.addEvent({
+          title: event.title,
+          start: event.start,
+          end: event.end,
+          extendedProps: event.extendedProps,
+        });
+      });
+
+      return data[`cart-${route.params.id}`];
+    },
+    toFirestore: (data) => {
+      return data;
+    },
+  }),
+);
 
 const calendarOptions = ref<CalendarOptions>({
   plugins: [dayGridPlugin, interactionPlugin],
