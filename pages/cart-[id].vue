@@ -103,7 +103,9 @@ const cartsData = useDocument(
 
       const data = snap.data();
 
-      data[`cart-${route.params.id}`].forEach((event) => {
+      api.removeAllEvents();
+
+      data[`cart-${route.params.id}`]?.forEach((event) => {
         api.addEvent({
           title: event.title,
           start: event.start,
