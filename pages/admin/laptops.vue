@@ -1,6 +1,12 @@
 <script setup lang="ts">
 import type { JokeRes, Laptop } from "@/types";
 
+definePageMeta({
+  middleware: () => {
+    return false;
+  },
+});
+
 const tab = ref(0);
 
 const generateRandomNumber = (max: number) => {

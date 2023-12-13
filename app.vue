@@ -11,6 +11,8 @@ const breadcrumbs = computed(() => {
     };
   });
 });
+
+const auth = useFirebaseAuth()!;
 </script>
 
 <template>
@@ -28,9 +30,12 @@ const breadcrumbs = computed(() => {
             <li>
               <a @click="navigateTo({ name: 'spaces' })">Spaces</a>
             </li>
+            <li v-if="auth">
+              <a @click="navigateTo({ name: 'admin' })">Admin</a>
+            </li>
           </ul>
         </div>
-        <div class="text-sm p-0 breadcrumbs">
+        <div class="text-sm p-0 breadcrumbs" v-if="!route.meta.noBreadCrumbs">
           <ul>
             <li>
               <button @click="router.push({ name: 'index' })">

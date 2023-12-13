@@ -1,71 +1,79 @@
 <script setup lang="ts">
-import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 definePageMeta({
   layout: "cardless",
   requiresAuth: false,
+  noBreadCrumbs: true,
 });
 
-// // data
-// const error = ref({
-//   message: "",
-//   status: "",
-// });
+// data
+const error = ref({
+  message: "",
+  status: "",
+});
 
-// const ignoreErrorCode = [
-//   "auth/account-exists-with-different-credential",
-//   "auth/credential-already-in-use",
-//   "auth/cancelled-popup-request",
-//   "auth/popup-closed-by-user",
-// ];
+const credentials = ref({
+  email: "",
+  password: "",
+});
 
-// const router = useRouter();
-// const route = useRoute();
-// const auth = useFirebaseAuth()!;
-// const provider = new GoogleAuthProvider();
+const router = useRouter();
+const route = useRoute();
+const auth = useFirebaseAuth()!;
 
-// // lifecycle
-// onMounted(async () => {
-//   const currentUser = await getCurrentUser();
-//   if (currentUser) {
-//     const to =
-//       route.query.redirect && typeof route.query.redirect === "string"
-//         ? route.query.redirect
-//         : "/";
+// lifecycle
+onMounted(async () => {
+  const currentUser = await getCurrentUser();
+  if (currentUser) {
+    const to =
+      route.query.to && typeof route.query.to === "string"
+        ? route.query.to
+        : "/";
 
-//     router.push(to);
-//   }
-// });
+    router.push(to);
+  }
+});
 
-// const signIn = () => {
-//   signInWithPopup(auth, provider)
-//     .then(() => {
-//       navigateTo("/");
-//     })
-//     .catch((err) => {
-//       if (!ignoreErrorCode.includes(err.code)) {
-//         try {
-//           const { error } = JSON.parse(err.message.match(/{.*}/g));
-//           error.value = error;
-//         } catch {
-//           error.value = {
-//             message: err.message,
-//             status: err.code,
-//           };
-//         }
-//       }
-//     });
-// };
+const signIn = () => {
+  signInWithEmailAndPassword(
+    auth,
+    credentials.value.email,
+    credentials.value.password,
+  )
+    .then((userCredential) => {
+      const user = userCredential.user;
+      const to =
+        route.query.to && typeof route.query.to === "string"
+          ? route.query.to
+          : "/";
+
+      router.push(to);
+    })
+    .catch((error) => {
+      error.value = {
+        message: error.message,
+        status: error.code,
+      };
+    });
+};
 </script>
 
 <template>
-  <div class="flex items-center justify-center align-middle">
+  <div class="flex flex-col items-center justify-center align-middle">
     <div class="card sm:shadow-lg bg-base-100">
       <div class="card-body">
-        <button class="btn">
-          <Icon name="devicon:google" />
-          Sign in with Google
-        </button>
+        <InputBasic
+          type="text"
+          placeholder="Email"
+          v-model="credentials.email"
+        />
+        <InputBasic
+          type="password"
+          placeholder="Password"
+          v-model="credentials.password"
+        />
+        <button class="btn btn-primary" @click="signIn">Sign In</button>
       </div>
     </div>
   </div>
