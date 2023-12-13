@@ -16,7 +16,7 @@ const breadcrumbs = computed(() => {
 <template>
   <div class="flex flex-col min-h-screen">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
-      <div class="gap-2 flex-wrap">
+      <div class="navbar-start gap-2 flex-wrap">
         <div class="text-sm p-0 breadcrumbs">
           <ul>
             <li>
@@ -34,6 +34,9 @@ const breadcrumbs = computed(() => {
             </li>
           </ul>
         </div>
+      </div>
+      <div class="navbar-end">
+        <RandomJoke />
       </div>
     </header>
     <main class="flex justify-center p-0 sm:p-3">

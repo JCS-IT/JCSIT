@@ -1,8 +1,10 @@
 export interface JokeRes {
   error: boolean;
   category: string;
-  type: string;
-  joke: string;
+  type: "single" | "twopart";
+  joke?: string;
+  setup?: string;
+  delivery?: string;
   flags: {
     nsfw: boolean;
     religious: boolean;
