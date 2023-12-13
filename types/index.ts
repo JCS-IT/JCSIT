@@ -22,6 +22,7 @@ export interface Cart {
 export interface Floor {
   name: string;
   carts: Cart[];
+  rooms: string[];
 }
 
 export interface NewEvent {
@@ -31,4 +32,10 @@ export interface NewEvent {
     start: string;
     end: string;
   };
+}
+
+export interface ConfigData {
+  floors: Floor[];
+  blocks: Record<string, { start: string; end: string }>;
+  rooms: string[];
 }

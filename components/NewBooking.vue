@@ -1,14 +1,10 @@
 <script setup lang="ts">
-import type {
-  CalendarOptions,
-  DateSelectArg,
-  EventClickArg,
-} from "@fullcalendar/core";
-import type { NewEvent } from "@/types";
-import { blocks } from "@/data/mapping";
+import type { ConfigData, NewEvent } from "@/types";
+import type { DateSelectArg } from "@fullcalendar/core";
 
-defineProps<{
+const props = defineProps<{
   metaData: DateSelectArg | null;
+  blocks: ConfigData["blocks"];
 }>();
 
 const emit = defineEmits<{
@@ -16,7 +12,7 @@ const emit = defineEmits<{
   (event: "cancel"): void;
 }>();
 
-const options = Object.keys(blocks);
+const options = Object.keys(props.blocks);
 
 const newEvent = ref<NewEvent>({
   name: "",
@@ -43,7 +39,7 @@ const isDisabled = computed(
     !newEvent.value.name ||
     !newEvent.value.room ||
     !newEvent.value.block.start ||
-    !newEvent.value.block.end
+    !newEvent.value.block.end,
 );
 
 defineExpose({

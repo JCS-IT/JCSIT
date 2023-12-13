@@ -18,6 +18,8 @@ import {
   type QueryDocumentSnapshot,
 } from "firebase/firestore";
 
+const roomDocRef = doc(useFirestore(), "global/rooms");
+
 const configData = useDocument<ConfigData>(
   doc(useFirestore(), "global/config"),
 );
@@ -29,7 +31,7 @@ definePageMeta({
 });
 
 const router = useRouter();
-const route = useRoute("cart-id");
+const route = useRoute("spaces-room");
 
 const dialog = ref<HTMLDialogElement | null>(null);
 
@@ -89,7 +91,7 @@ const handleEventClick = (clickInfo: EventClickArg) => {
 };
 
 const cartsData = useDocument(
-  doc(useFirestore(), "global/carts").withConverter({
+  roomDocRef.withConverter({
     fromFirestore: (
       snap: QueryDocumentSnapshot<{
         [cart: string]: {
@@ -109,7 +111,7 @@ const cartsData = useDocument(
 
       api.removeAllEvents();
 
-      data[`cart-${route.params.id}`]?.forEach((event) => {
+      data[`${route.params.room}`]?.forEach((event) => {
         api.addEvent({
           title: event.title,
           start: event.start,
@@ -118,7 +120,7 @@ const cartsData = useDocument(
         });
       });
 
-      return data[`cart-${route.params.id}`];
+      return data[`${route.params.room}`];
     },
     toFirestore: (data) => {
       return data;
@@ -142,8 +144,8 @@ const calendarOptions = ref<CalendarOptions>({
   windowResizeDelay: 0,
   selectLongPressDelay: 0,
   eventAdd: async (e) => {
-    await updateDoc(doc(useFirestore(), "global/carts"), {
-      [`cart-${route.params.id}`]: arrayUnion({
+    await updateDoc(roomDocRef, {
+      [`${route.params.room}`]: arrayUnion({
         title: e.event.title,
         start: e.event.startStr,
         end: e.event.endStr,
@@ -152,8 +154,8 @@ const calendarOptions = ref<CalendarOptions>({
     });
   },
   eventRemove: async (e) => {
-    await updateDoc(doc(useFirestore(), "global/carts"), {
-      [`cart-${route.params.id}`]: arrayRemove({
+    await updateDoc(roomDocRef, {
+      [`${route.params.room}`]: arrayRemove({
         title: e.event.title,
         start: e.event.startStr,
         end: e.event.endStr,

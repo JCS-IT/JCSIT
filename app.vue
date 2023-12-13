@@ -17,6 +17,19 @@ const breadcrumbs = computed(() => {
   <div class="flex flex-col min-h-screen">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
       <div class="navbar-start gap-2 flex-wrap">
+        <div class="dropdown">
+          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
+            <IconCSS name="mdi:menu" />
+          </div>
+          <ul
+            tabindex="0"
+            class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+          >
+            <li>
+              <a @click="navigateTo({ name: 'spaces' })">Spaces</a>
+            </li>
+          </ul>
+        </div>
         <div class="text-sm p-0 breadcrumbs">
           <ul>
             <li>
@@ -36,7 +49,7 @@ const breadcrumbs = computed(() => {
         </div>
       </div>
       <div class="navbar-end">
-        <RandomJoke />
+        <JokeDialog />
       </div>
     </header>
     <main class="flex justify-center p-0 sm:p-3">
