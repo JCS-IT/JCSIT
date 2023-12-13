@@ -19,7 +19,7 @@ definePageMeta({
 });
 
 const router = useRouter();
-const route = useRoute("laptops-cart-id");
+const route = useRoute("cart-id");
 
 const dialog = ref<HTMLDialogElement | null>(null);
 

@@ -17,15 +17,16 @@ const breadcrumbs = computed(() => {
   <div class="flex flex-col min-h-screen">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
       <div class="gap-2 flex-wrap">
-        <button
-          class="text-xl font-bold"
-          @click="router.push({ name: 'index' })"
-        >
-          JCS IT
-        </button>
         <div class="text-sm p-0 breadcrumbs">
           <ul>
-            <li />
+            <li>
+              <button @click="router.push({ name: 'index' })">
+                <Transition>
+                  <IconCSS name="mdi:home" v-if="breadcrumbs.length != 0" />
+                  <span v-else class="text-xl font-bold">JCS Laptops</span>
+                </Transition>
+              </button>
+            </li>
             <li v-for="(item, index) in breadcrumbs" :key="index">
               <a @click.prevent="navigateTo(item.url)">
                 {{ item.label }}
