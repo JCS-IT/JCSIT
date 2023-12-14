@@ -18,7 +18,7 @@ import {
   type QueryDocumentSnapshot,
 } from "firebase/firestore";
 
-const roomDocRef = doc(useFirestore(), "global/rooms");
+const roomDocRef = doc(useFirestore(), "global/spaces");
 
 const configData = useDocument<ConfigData>(
   doc(useFirestore(), "global/config"),
@@ -26,7 +26,7 @@ const configData = useDocument<ConfigData>(
 
 definePageMeta({
   title: "Booking",
-  description: "Book a laptop cart",
+  description: "Book a space",
   layout: "full-width",
 });
 

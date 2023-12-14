@@ -16,7 +16,7 @@ export default defineNuxtConfig({
   app: {
     head: {
       charset: "utf-8",
-      title: "JCS IT",
+      title: "JCS Bookings",
       viewport: "width=device-width, initial-scale=1",
       noscript: [{ innerHTML: "JCSIT requires javascript to function" }],
     },
@@ -28,10 +28,6 @@ export default defineNuxtConfig({
 
   vue: {
     defineModel: true,
-  },
-
-  build: {
-    transpile: ["vue-sonner"],
   },
 
   vite: {
