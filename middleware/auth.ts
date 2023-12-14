@@ -1,6 +1,12 @@
-export default defineNuxtRouteMiddleware((to, from) => {
-  const auth = useFirebaseAuth();
-  if (!auth?.currentUser) {
-    return navigateTo(`/login?to=${encodeURI(to.path)}`);
+export default defineNuxtRouteMiddleware(async (to, from) => {
+  const user = await getCurrentUser();
+
+  if (!user) {
+    return navigateTo({
+      path: "/login",
+      query: {
+        to: to.fullPath,
+      },
+    });
   }
 });
