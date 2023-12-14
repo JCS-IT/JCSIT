@@ -12,7 +12,7 @@ const breadcrumbs = computed(() => {
   });
 });
 
-const auth = useFirebaseAuth()!;
+const user = useCurrentUser();
 </script>
 
 <template>
@@ -30,7 +30,7 @@ const auth = useFirebaseAuth()!;
             <li>
               <a @click="navigateTo({ name: 'spaces' })">Spaces</a>
             </li>
-            <li v-if="auth">
+            <li v-if="user">
               <a @click="navigateTo({ name: 'admin' })">Admin</a>
             </li>
           </ul>

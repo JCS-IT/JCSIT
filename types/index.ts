@@ -11,20 +11,14 @@ export interface Cart {
   name: string;
   location: {
     room: string;
-    floor: string;
+    floor: string | number;
   };
-  color:
-    | string
-    | {
-        bg: string;
-        text: string;
-      };
+  color: string;
 }
 
 export interface Floor {
   name: string;
   carts: Cart[];
-  rooms: string[];
 }
 
 export interface NewEvent {
