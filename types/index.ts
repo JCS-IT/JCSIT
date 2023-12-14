@@ -13,10 +13,12 @@ export interface Cart {
     room: string;
     floor: string;
   };
-  color: {
-    bg: string;
-    text: string;
-  };
+  color:
+    | string
+    | {
+        bg: string;
+        text: string;
+      };
 }
 
 export interface Floor {

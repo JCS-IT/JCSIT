@@ -22,8 +22,8 @@ const configData = useDocument<ConfigData>(
           :key="cart.id"
           @click="router.push({ name: 'cart-id', params: { id: cart.id } })"
           :style="{
-            backgroundColor: `#${cart.color.bg}`,
-            color: `#${cart.color.text}`,
+            backgroundColor: `#${cart.color}`,
+            color: getTextColor(`#${cart.color}`),
           }"
           class="flex-grow"
         >

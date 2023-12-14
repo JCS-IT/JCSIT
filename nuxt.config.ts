@@ -18,7 +18,7 @@ export default defineNuxtConfig({
       charset: "utf-8",
       title: "JCS Bookings",
       viewport: "width=device-width, initial-scale=1",
-      noscript: [{ innerHTML: "JCSIT requires javascript to function" }],
+      noscript: [{ innerHTML: "JCS Bookings requires javascript to function" }],
     },
   },
 
@@ -57,12 +57,9 @@ export default defineNuxtConfig({
 
   modules: [
     "@nuxtjs/tailwindcss",
-    "@pinia/nuxt",
-    "@pinia-plugin-persistedstate/nuxt",
     "nuxt-icon",
     "@vueuse/nuxt",
     "nuxt-typed-router",
-    "nuxt-headlessui",
     "@nuxtjs/google-fonts",
     "dayjs-nuxt",
     "nuxt-vuefire",
