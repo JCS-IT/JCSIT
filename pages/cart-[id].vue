@@ -62,7 +62,7 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
     );
     targetPose.value.y = Math.min(
       Math.max(targetPose.value.y, 0),
-      window.innerHeight - 520,
+      window.innerHeight - 525,
     );
 
     prompts.value.create =
