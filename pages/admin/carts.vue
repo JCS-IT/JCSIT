@@ -42,59 +42,47 @@ const updateCarts = async () => {
 
 <template>
   <NewCart />
-  <table class="table table-zebra">
-    <thead>
-      <tr>
-        <th>Cart</th>
-        <th>Name</th>
-        <th>Floor</th>
-        <th>Room</th>
-        <th>Color</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="(_, i) in carts">
-        <td>
-          <InputBasic
-            type="number"
-            class="w-[70px]"
-            placeholder="Cart ID"
-            v-model="carts[i].id"
-          />
-        </td>
-        <td>
-          <InputBasic
-            type="text"
-            class="w-[10rem]"
-            placeholder="Cart Name"
-            v-model="carts[i].name"
-          />
-        </td>
-        <td>
-          <InputBasic
-            type="number"
-            placeholder="Floor"
-            class="w-[5rem]"
-            v-model="carts[i].location.floor"
-          />
-        </td>
-        <td>
-          <InputBasic
-            type="text"
-            placeholder="Room"
-            class="w-[5.5rem]"
-            v-model="carts[i].location.room"
-          />
-        </td>
-        <td>
-          <InputBasic
-            type="text"
-            placeholder="Color"
-            class="w-[5.5rem]"
-            v-model="carts[i].color"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="grid gap-2">
+    <div class="flex">
+      <span class="text-sm w-[4.5rem]">Number</span>
+      <span class="text-sm w-[10rem]">Name</span>
+      <span class="text-sm w-[80px]">Floor</span>
+      <span class="text-sm w-[88px]">Room</span>
+      <span class="text-sm w-[84px]">Color</span>
+    </div>
+    <div v-for="(_, i) in carts" class="even:bg-base-200 rounded-md join">
+      <InputBasic
+        type="number"
+        class="bg-inherit w-[4.5rem] join-item"
+        min="1"
+        max="99"
+        v-model="carts[i].id"
+      />
+      <InputBasic
+        type="text"
+        class="bg-inherit w-[10rem] join-item"
+        placeholder="Cart Name"
+        v-model="carts[i].name"
+      />
+      <InputBasic
+        type="number"
+        class="bg-inherit w-[5rem] join-item"
+        min="1"
+        max="3"
+        v-model="carts[i].location.floor"
+      />
+      <InputBasic
+        type="text"
+        class="bg-inherit w-[5.5rem] join-item"
+        placeholder="Room"
+        v-model="carts[i].location.room"
+      />
+      <InputBasic
+        type="text"
+        class="bg-inherit w-[5.5rem] join-item"
+        placeholder="Color"
+        v-model="carts[i].color"
+      />
+    </div>
+  </div>
 </template>

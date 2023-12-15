@@ -72,7 +72,7 @@ const newCart = ref<Cart>({
 </template>
 
 <style scoped>
-input[type="color"] {
+/* input[type="color"] {
   width: 3rem;
   height: 3rem;
   padding: 0.5rem;
@@ -90,5 +90,5 @@ input[type="color" i] {
   border-color: rgb(169, 169, 169);
   border-image: initial;
   padding: 1px 2px;
-}
+} */
 </style>
