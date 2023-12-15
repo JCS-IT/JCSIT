@@ -41,48 +41,73 @@ const updateCarts = async () => {
 </script>
 
 <template>
-  <NewCart />
+  <NewCart @submit="(d) => carts.push(d)" />
+  <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+    <IconCSS name="mdi:close" />
+  </button>
+
   <div class="grid gap-2">
-    <div class="flex">
-      <span class="text-sm w-[4.5rem]">Number</span>
-      <span class="text-sm w-[10rem]">Name</span>
-      <span class="text-sm w-[80px]">Floor</span>
-      <span class="text-sm w-[88px]">Room</span>
-      <span class="text-sm w-[84px]">Color</span>
+    <div class="grid grid-cols ml-2">
+      <span
+        v-for="text in ['number', 'name', 'floor', 'room', 'color (hex)']"
+        class="capitalize text-xs text-[var(--fallback-bc,oklch(var(--bc)/0.6))] font-extrabold"
+      >
+        {{ text }}
+      </span>
     </div>
-    <div v-for="(_, i) in carts" class="even:bg-base-200 rounded-md join">
-      <InputBasic
+    <div
+      v-for="(_, i) in carts.sort((a, b) => a.id - b.id)"
+      class="grid grid-cols odd:bg-base-200 join"
+    >
+      <input
         type="number"
-        class="bg-inherit w-[4.5rem] join-item"
+        class="input input-bordered bg-inherit join-item"
         min="1"
         max="99"
         v-model="carts[i].id"
       />
-      <InputBasic
+      <input
         type="text"
-        class="bg-inherit w-[10rem] join-item"
+        class="input input-bordered bg-inherit join-item"
         placeholder="Cart Name"
         v-model="carts[i].name"
       />
-      <InputBasic
+      <input
         type="number"
-        class="bg-inherit w-[5rem] join-item"
+        class="input input-bordered bg-inherit join-item"
         min="1"
         max="3"
         v-model="carts[i].location.floor"
       />
-      <InputBasic
+      <input
         type="text"
-        class="bg-inherit w-[5.5rem] join-item"
+        class="input input-bordered bg-inherit join-item"
         placeholder="Room"
         v-model="carts[i].location.room"
       />
-      <InputBasic
+      <input
         type="text"
-        class="bg-inherit w-[5.5rem] join-item"
+        class="input input-bordered bg-inherit join-item"
         placeholder="Color"
         v-model="carts[i].color"
+        maxlength="7"
+        pattern="#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?"
       />
+      <button
+        class="btn join-item input-bordered"
+        @click="
+          carts.splice(i, 1);
+          updateCarts();
+        "
+      >
+        <IconCSS name="mdi:delete" />
+      </button>
     </div>
   </div>
 </template>
+
+<style scoped>
+.grid-cols {
+  @apply grid-cols-[4.5rem_10rem_4.5rem_7rem_5.5rem_1fr];
+}
+</style>

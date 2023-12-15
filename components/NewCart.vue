@@ -1,6 +1,10 @@
 <script setup lang="ts">
 import type { Cart } from "~/types";
 
+const emit = defineEmits<{
+  (event: "submit", data: Cart): void;
+}>();
+
 const dialog = ref<HTMLDialogElement | null>(null);
 
 const newCart = ref<Cart>({
@@ -27,43 +31,53 @@ const newCart = ref<Cart>({
         </button>
       </form>
       <span class="text-center font-semibold">New Cart</span>
-      <div class="grid gap-2 mt-5">
+      <div class="grid mt-5 join join-vertical">
         <input
           type="number"
-          class="input input-bordered"
-          v-model="newCart.id"
+          class="input input-bordered bg-inherit join-item"
           placeholder="Number"
+          min="1"
+          max="99"
+          v-model="newCart.id"
         />
         <input
           type="text"
-          class="input input-bordered"
-          v-model="newCart.name"
+          class="input input-bordered bg-inherit join-item"
           placeholder="Name"
-        />
-        <input
-          type="text"
-          class="input input-bordered"
-          v-model="newCart.location.room"
-          placeholder="Room"
+          v-model="newCart.name"
         />
         <input
           type="number"
+          class="input input-bordered bg-inherit join-item"
+          placeholder="Floor"
           min="1"
           max="3"
-          class="input input-bordered"
           v-model="newCart.location.floor"
-          placeholder="Floor"
         />
         <input
-          type="color"
-          class="w-full bg-inherit rounded-xl"
-          placeholder="Color (in HEX)"
-          v-model="newCart.color"
+          type="text"
+          class="input input-bordered bg-inherit join-item"
+          placeholder="Room"
+          v-model="newCart.location.room"
         />
-        <button class="btn btn-block btn-success">
-          <span>Submit</span>
-        </button>
+        <input
+          type="text"
+          class="input input-bordered bg-inherit join-item"
+          placeholder="Color (hex)"
+          v-model="newCart.color"
+          maxlength="7"
+          pattern="[0-9a-fA-F]{3}([0-9a-fA-F]{3})?"
+        />
       </div>
+      <button
+        class="btn btn-block btn-success mt-2"
+        @click="
+          emit('submit', newCart);
+          dialog?.close();
+        "
+      >
+        <span>Submit</span>
+      </button>
     </div>
     <form class="modal-backdrop" method="dialog">
       <button />
