@@ -3,7 +3,11 @@ const dialog = ref<HTMLDialogElement | null>(null);
 </script>
 
 <template>
-  <button class="btn btn-ghost" @click="dialog?.showModal()">
+  <button
+    class="btn btn-ghost"
+    @click="dialog?.showModal()"
+    title="Random Joke"
+  >
     <IconCSS name="mdi:comedy" />
   </button>
   <dialog class="modal" ref="dialog">
