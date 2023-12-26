@@ -1,8 +1,5 @@
 {
-    "editor.quickSuggestions": {
-        "strings": true
-    },
-    // tailwindCSS IntelliSense
+    "typescript.tsdk": "node_modules/typescript/lib",
     "tailwindCSS.emmetCompletions": true,
     "tailwindCSS.includeLanguages": {
         "plaintext": "html"
@@ -11,4 +8,16 @@
     "files.associations": {
         "*.css": "tailwindcss"
     },
+    // Volar
+    "volar.format.initialIndent": {
+        "html": true
+    },
+    "volar.takeOverMode.extension": "Vue.volar",
+    // Nuxtr
+    "nuxtr.intellisense.nuxtrc": true,
+    "nuxtr.intellisense.vueFiles": true,
+    "nuxtr.intellisense.nuxtignore": true,
+    "tailwindCSS.experimental.classRegex": [
+        "class:\\s*?[\"'`]([^\"'`]*).*?,"
+    ]
 }

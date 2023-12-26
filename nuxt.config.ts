@@ -6,8 +6,8 @@ export default defineNuxtConfig({
     timeline: {
       enabled: true,
     },
+    sourceMapsEnabled: true,
   },
-
   experimental: {
     typedPages: true,
     viewTransition: true,
