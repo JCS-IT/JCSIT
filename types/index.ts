@@ -32,6 +32,6 @@ export interface NewEvent {
 
 export interface ConfigData {
   floors: Floor[];
-  blocks: Record<string, { start: string; end: string }>;
+  blocks: { name: string; start: string; end: string }[];
   rooms: string[];
 }

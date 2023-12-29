@@ -5,15 +5,13 @@ import type { DateSelectArg } from "@fullcalendar/core";
 const props = defineProps<{
   metaData: DateSelectArg | null;
   blocks: ConfigData["blocks"];
-  room?: boolean;
+  noRoom?: boolean;
 }>();
 
 const emit = defineEmits<{
   (event: "submit", value: NewEvent): void;
   (event: "cancel"): void;
 }>();
-
-const options = Object.keys(props.blocks);
 
 const newEvent = ref<NewEvent>({
   name: "",
@@ -56,25 +54,53 @@ defineExpose({
         <span>{{ $dayjs(metaData?.start).format("dddd, MMMM DD") }}</span>
         <!-- Info -->
         <InputBasic type="text" placeholder="Name" v-model="newEvent.name" />
-        <InputBasic
+        <input
+          class="input input-bordered"
           type="number"
-          placeholder="Room Number"
+          inputmode="numeric"
           v-model="newEvent.room"
-          v-if="!room"
+          placeholder="Room Number"
+          pattern="[0-9]*"
+          maxlength="4"
+          v-if="!noRoom"
         />
 
-        <!-- Blocks -->
-        <InputDropdown
-          :options="options"
-          placeholder="Start block"
+        <select
+          tabindex="0"
           v-model="newEvent.block.start"
+          class="select select-bordered w-full"
+          ref="select"
           @change="newEvent.block.end = newEvent.block.start"
-        />
-        <InputDropdown
-          :options="options"
-          placeholder="End block"
+        >
+          <option value="" disabled selected hidden>Select an option</option>
+          <option
+            v-for="option in blocks"
+            :key="option.name"
+            tabindex="1"
+            class="text-lg"
+            :value="option.name"
+          >
+            {{ option.name }}
+          </option>
+        </select>
+        <select
+          tabindex="0"
           v-model="newEvent.block.end"
-        />
+          class="select select-bordered w-full"
+          ref="select"
+        >
+          <option value="" disabled selected hidden>Select an option</option>
+          <option
+            v-for="option in blocks"
+            :key="option.name"
+            tabindex="1"
+            class="text-lg"
+            :value="option.name"
+          >
+            {{ option.name }}
+          </option>
+        </select>
+
         <div class="grid grid-cols-2 gap-2">
           <Button
             class="btn-success w-full"

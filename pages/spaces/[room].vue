@@ -183,8 +183,10 @@ const calendarOptions = ref<CalendarOptions>({
 const addEvent = (data: NewEvent) => {
   if (!data.name || !data.room || !data.block.start || !data.block.end) return;
 
-  const startBlock = blocks[data.block.start];
-  const endBlock = blocks[data.block.end];
+  const startBlock = blocks.find((b) => b.name == data.block.start);
+  const endBlock = blocks.find((b) => b.name == data.block.end);
+
+  if (!startBlock || !endBlock) return;
 
   const calendarApi: CalendarApi = calendar.value?.getApi();
 
@@ -216,7 +218,7 @@ const addEvent = (data: NewEvent) => {
         @cancel="dialog?.close()"
         class="modal-box"
         :blocks="configData?.blocks"
-        room
+        noRoom
       />
     </dialog>
     <Transition>
@@ -230,6 +232,7 @@ const addEvent = (data: NewEvent) => {
           @submit="addEvent"
           @cancel="prompts.create = false"
           :blocks="configData?.blocks"
+          noRoom
         />
       </div>
     </Transition>
