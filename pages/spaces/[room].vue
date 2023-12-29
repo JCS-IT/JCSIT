@@ -10,15 +10,15 @@ import type {
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/vue3";
+import type { FirebaseError } from "firebase/app";
 import {
   arrayRemove,
   arrayUnion,
   doc,
+  setDoc,
   updateDoc,
   type QueryDocumentSnapshot,
 } from "firebase/firestore";
-
-const roomDocRef = doc(useFirestore(), "global/spaces");
 
 const configData = useDocument<ConfigData>(
   doc(useFirestore(), "global/config"),
@@ -30,8 +30,8 @@ definePageMeta({
   layout: "full-width",
 });
 
-const router = useRouter();
 const route = useRoute("spaces-room");
+const dayjs = useDayjs();
 
 const dialog = ref<HTMLDialogElement | null>(null);
 
@@ -90,8 +90,10 @@ const handleEventClick = (clickInfo: EventClickArg) => {
   }
 };
 
-const cartsData = useDocument(
-  roomDocRef.withConverter({
+const bookingRef = doc(useFirestore(), "bookings", dayjs().year().toString());
+
+useDocument(
+  bookingRef.withConverter({
     fromFirestore: (
       snap: QueryDocumentSnapshot<{
         [cart: string]: {
@@ -144,17 +146,30 @@ const calendarOptions = ref<CalendarOptions>({
   windowResizeDelay: 0,
   selectLongPressDelay: 0,
   eventAdd: async (e) => {
-    await updateDoc(roomDocRef, {
+    await updateDoc(bookingRef, {
       [`${route.params.room}`]: arrayUnion({
         title: e.event.title,
         start: e.event.startStr,
         end: e.event.endStr,
         extendedProps: e.event.extendedProps,
       }),
+    }).catch(async (err: FirebaseError) => {
+      if (err.code == "not-found") {
+        await setDoc(bookingRef, {
+          [`${route.params.room}`]: [
+            {
+              title: e.event.title,
+              start: e.event.startStr,
+              end: e.event.endStr,
+              extendedProps: e.event.extendedProps,
+            },
+          ],
+        });
+      }
     });
   },
   eventRemove: async (e) => {
-    await updateDoc(roomDocRef, {
+    await updateDoc(bookingRef, {
       [`${route.params.room}`]: arrayRemove({
         title: e.event.title,
         start: e.event.startStr,
@@ -201,6 +216,7 @@ const addEvent = (data: NewEvent) => {
         @cancel="dialog?.close()"
         class="modal-box"
         :blocks="configData?.blocks"
+        room
       />
     </dialog>
     <Transition>

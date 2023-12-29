@@ -1,3 +1,5 @@
+export * from ".";
+
 /**
  * Calculates the appropriate text color based on the background color.
  * @param bgColor - The background color in either hex or RGB format.

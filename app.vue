@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { slugToTitle } from "./utils/parse";
+
 const router = useRouter();
 const route = useRoute();
 
@@ -47,7 +49,7 @@ const user = useCurrentUser();
             </li>
             <li v-for="(item, index) in breadcrumbs" :key="index">
               <a @click.prevent="navigateTo(item.url)">
-                {{ item.label }}
+                {{ slugToTitle(item.label) }}
               </a>
             </li>
           </ul>

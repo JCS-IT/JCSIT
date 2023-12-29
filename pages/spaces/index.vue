@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { doc } from "firebase/firestore";
 import type { ConfigData } from "@/types";
+import { stringToSlug } from "~/utils/parse";
 const router = useRouter();
 
 const configData = useDocument<ConfigData>(
@@ -28,7 +29,12 @@ const configData = useDocument<ConfigData>(
             (room) =>
               room.includes(floor) || room.split('')[0] == (i + 1).toString(),
           )"
-          @click="router.push({ name: 'spaces-room', params: { room: room } })"
+          @click="
+            navigateTo({
+              name: 'spaces-room',
+              params: { room: stringToSlug(room) },
+            })
+          "
           class="flex-grow"
         >
           {{ parseInt(room) ? `Room ${room}` : room }}

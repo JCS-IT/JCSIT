@@ -10,17 +10,24 @@ import type {
 import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/vue3";
+import type { FirebaseError } from "firebase/app";
 import {
   arrayRemove,
   arrayUnion,
   doc,
   updateDoc,
   type QueryDocumentSnapshot,
+  collection,
+  getDoc,
+  setDoc,
+  Timestamp,
 } from "firebase/firestore";
 
 const configData = useDocument<ConfigData>(
   doc(useFirestore(), "global/config"),
 );
+
+const dayjs = useDayjs();
 
 definePageMeta({
   title: "Booking",
@@ -88,8 +95,10 @@ const handleEventClick = (clickInfo: EventClickArg) => {
   }
 };
 
-const cartsData = useDocument(
-  doc(useFirestore(), "global/carts").withConverter({
+const bookingRef = doc(useFirestore(), "bookings", dayjs().year().toString());
+
+const bookingData = useDocument(
+  bookingRef.withConverter({
     fromFirestore: (
       snap: QueryDocumentSnapshot<{
         [cart: string]: {
@@ -142,17 +151,30 @@ const calendarOptions = ref<CalendarOptions>({
   windowResizeDelay: 0,
   selectLongPressDelay: 0,
   eventAdd: async (e) => {
-    await updateDoc(doc(useFirestore(), "global/carts"), {
+    await updateDoc(bookingRef, {
       [`cart-${route.params.id}`]: arrayUnion({
         title: e.event.title,
         start: e.event.startStr,
         end: e.event.endStr,
         extendedProps: e.event.extendedProps,
       }),
+    }).catch(async (err: FirebaseError) => {
+      if (err.code == "not-found") {
+        await setDoc(bookingRef, {
+          [`cart-${route.params.id}`]: [
+            {
+              title: e.event.title,
+              start: e.event.startStr,
+              end: e.event.endStr,
+              extendedProps: e.event.extendedProps,
+            },
+          ],
+        });
+      }
     });
   },
   eventRemove: async (e) => {
-    await updateDoc(doc(useFirestore(), "global/carts"), {
+    await updateDoc(bookingRef, {
       [`cart-${route.params.id}`]: arrayRemove({
         title: e.event.title,
         start: e.event.startStr,

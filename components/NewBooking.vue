@@ -5,6 +5,7 @@ import type { DateSelectArg } from "@fullcalendar/core";
 const props = defineProps<{
   metaData: DateSelectArg | null;
   blocks: ConfigData["blocks"];
+  room?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -59,6 +60,7 @@ defineExpose({
           type="number"
           placeholder="Room Number"
           v-model="newEvent.room"
+          v-if="!room"
         />
 
         <!-- Blocks -->
