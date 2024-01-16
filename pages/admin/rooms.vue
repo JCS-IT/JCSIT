@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  writeBatch,
-} from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import type { ConfigData } from "~/types";
-import { useToast } from "vue-toastification";
 
 definePageMeta({
   middleware: "auth",
