@@ -63,6 +63,7 @@ const updateRooms = async () => {
       </div>
     </div>
     <div class="divider" />
+
     <div v-if="configData?.rooms && configData.rooms.length > 0">
       <div class="flex flex-wrap max-w-4xl gap-1">
         <div
