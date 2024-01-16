@@ -22,7 +22,7 @@ const config = useRuntimeConfig();
 <template>
   <div class="flex flex-col min-h-screen">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
-      <div class="navbar-start gap-2 flex-wrap">
+      <div class="justify-start gap-2 flex-wrap flex-grow w-full">
         <div class="dropdown">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
             <IconCSS name="mdi:menu" />
@@ -56,7 +56,7 @@ const config = useRuntimeConfig();
           </ul>
         </div>
       </div>
-      <div class="navbar-end">
+      <div class="justify-end flex-shrink">
         <JokeDialog />
       </div>
     </header>
