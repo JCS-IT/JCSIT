@@ -27,7 +27,7 @@ const user = useCurrentUser();
           </div>
           <ul
             tabindex="0"
-            class="menu menu-sm dropdown-content z-[1] p-2 shadow-xl bg-base-100 rounded-box w-30"
+            class="menu menu-sm mt-3 dropdown-content z-[1] p-2 shadow-xl bg-base-200 rounded-box w-30"
           >
             <li>
               <a @click="navigateTo({ name: 'spaces' })">Spaces</a>
