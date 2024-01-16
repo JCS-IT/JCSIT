@@ -15,6 +15,8 @@ const breadcrumbs = computed(() => {
 });
 
 const user = useCurrentUser();
+
+const config = useRuntimeConfig();
 </script>
 
 <template>
@@ -70,5 +72,12 @@ const user = useCurrentUser();
         </template>
       </Suspense>
     </main>
+    <footer class="footer pl-2 fixed bottom-0 [&>* *]:outline">
+      <span
+        class="text-transparent hover:text-base-content hover:text-xl transition-all"
+      >
+        {{ config.public.__GIT_HASH__ }}
+      </span>
+    </footer>
   </div>
 </template>
