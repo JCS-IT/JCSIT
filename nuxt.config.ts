@@ -1,3 +1,5 @@
+import git from "git-rev-sync";
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
@@ -5,6 +7,12 @@ export default defineNuxtConfig({
     enabled: true,
     timeline: {
       enabled: true,
+    },
+  },
+
+  runtimeConfig: {
+    public: {
+      __GIT_HASH__: git.short(),
     },
   },
 
