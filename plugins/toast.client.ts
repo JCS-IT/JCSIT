@@ -1,14 +1,16 @@
-import Toast, { POSITION, type PluginOptions } from "vue-toastification";
-import "vue-toastification/dist/index.css";
+import Vue3Toastify, { toast, type ToastContainerOptions } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
-const options: PluginOptions = {
-  timeout: 3000,
-  position: POSITION.BOTTOM_LEFT,
-  closeOnClick: true,
-  draggable: true,
-  pauseOnFocusLoss: true,
+const options: ToastContainerOptions = {
+  autoClose: 2000,
+  position: "bottom-left",
 };
 
 export default defineNuxtPlugin((nuxtApp) => {
-  nuxtApp.vueApp.use(Toast, options);
+  nuxtApp.vueApp.use(Vue3Toastify, options);
+  return {
+    provide: {
+      toast,
+    },
+  };
 });
