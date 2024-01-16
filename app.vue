@@ -27,7 +27,7 @@ const user = useCurrentUser();
           </div>
           <ul
             tabindex="0"
-            class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+            class="menu menu-sm mt-3 dropdown-content z-[1] p-2 shadow-xl bg-base-200 rounded-box w-30"
           >
             <li>
               <a @click="navigateTo({ name: 'spaces' })">Spaces</a>
@@ -43,7 +43,6 @@ const user = useCurrentUser();
               <button @click="router.push({ name: 'index' })">
                 <Transition>
                   <IconCSS name="mdi:home" v-if="breadcrumbs.length != 0" />
-                  <span v-else class="text-xl font-bold">JCS Laptops</span>
                 </Transition>
               </button>
             </li>

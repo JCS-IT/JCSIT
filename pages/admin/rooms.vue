@@ -1,13 +1,6 @@
 <script setup lang="ts">
-import {
-  doc,
-  updateDoc,
-  arrayUnion,
-  arrayRemove,
-  writeBatch,
-} from "firebase/firestore";
+import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
 import type { ConfigData } from "~/types";
-import { useToast } from "vue-toastification";
 
 definePageMeta({
   middleware: "auth",
@@ -70,6 +63,7 @@ const updateRooms = async () => {
       </div>
     </div>
     <div class="divider" />
+
     <div v-if="configData?.rooms && configData.rooms.length > 0">
       <div class="flex flex-wrap max-w-4xl gap-1">
         <div

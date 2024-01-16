@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { doc, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-import type { Cart, ConfigData, Floor } from "~/types";
+import { doc, updateDoc } from "firebase/firestore";
+import type { Cart, ConfigData } from "~/types";
 
 definePageMeta({
   middleware: "auth",
@@ -38,16 +38,18 @@ const updateCarts = async () => {
     ],
   });
 };
+
+const { width } = useWindowSize();
 </script>
 
 <template>
   <NewCart @submit="(d) => carts.push(d)" />
-  <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-    <IconCSS name="mdi:close" />
-  </button>
 
   <div class="grid gap-2">
-    <div class="grid grid-cols ml-2">
+    <div
+      class="grid sm:grid-cols-[4.5rem_10rem_4.5rem_7rem_5.5rem_1fr] ml-2"
+      v-if="width > 640"
+    >
       <span
         v-for="text in ['number', 'name', 'floor', 'room', 'color (hex)']"
         class="capitalize text-xs text-[var(--fallback-bc,oklch(var(--bc)/0.6))] font-extrabold"
@@ -57,20 +59,24 @@ const updateCarts = async () => {
     </div>
     <div
       v-for="(_, i) in carts.sort((a, b) => a.id - b.id)"
-      class="grid grid-cols odd:bg-base-200 join"
+      class="grid sm:grid-cols-[4.5rem_10rem_4.5rem_7rem_5.5rem_1fr] odd:bg-base-200 join max-sm:join-vertical"
     >
-      <input
-        type="number"
-        class="input input-bordered bg-inherit join-item"
-        min="1"
-        max="99"
-        v-model="carts[i].id"
-      />
+      <label class="form-control join-item w-full">
+        <input
+          type="number"
+          class="input input-bordered bg-inherit join-item"
+          min="1"
+          max="99"
+          v-model="carts[i].id"
+          title="Cart Number"
+        />
+      </label>
       <input
         type="text"
         class="input input-bordered bg-inherit join-item"
         placeholder="Cart Name"
         v-model="carts[i].name"
+        title="Cart Name"
       />
       <input
         type="number"
@@ -84,6 +90,7 @@ const updateCarts = async () => {
         class="input input-bordered bg-inherit join-item"
         placeholder="Room"
         v-model="carts[i].location.room"
+        title="Room"
       />
       <input
         type="text"
@@ -92,9 +99,10 @@ const updateCarts = async () => {
         v-model="carts[i].color"
         maxlength="7"
         pattern="#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?"
+        title="Color (HEX)"
       />
       <button
-        class="btn join-item input-bordered"
+        class="btn btn-ghost join-item input-bordered"
         @click="
           carts.splice(i, 1);
           updateCarts();

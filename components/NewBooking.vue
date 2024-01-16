@@ -36,7 +36,7 @@ const clear = () => {
 const isDisabled = computed(
   () =>
     !newEvent.value.name ||
-    !newEvent.value.room ||
+    (!newEvent.value.room && !props.noRoom) ||
     !newEvent.value.block.start ||
     !newEvent.value.block.end,
 );
