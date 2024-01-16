@@ -21,7 +21,7 @@ const user = useCurrentUser();
   <div class="flex flex-col min-h-screen">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
       <div class="navbar-start gap-2 flex-wrap">
-        <div class="dropdown">
+        <div class="dropdown" v-if="user">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
             <IconCSS name="mdi:menu" />
           </div>
@@ -30,9 +30,6 @@ const user = useCurrentUser();
             class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
           >
             <li>
-              <a @click="navigateTo({ name: 'spaces' })">Spaces</a>
-            </li>
-            <li v-if="user">
               <a @click="navigateTo({ name: 'admin' })">Admin</a>
             </li>
           </ul>
@@ -43,7 +40,19 @@ const user = useCurrentUser();
               <button @click="router.push({ name: 'index' })">
                 <Transition>
                   <IconCSS name="mdi:home" v-if="breadcrumbs.length != 0" />
-                  <span v-else class="text-xl font-bold">JCS Laptops</span>
+                  <div v-else>
+                    <IconCSS name="mdi:laptop" />
+                    <span
+                      class="text-xl font-bold"
+                      @click="navigateTo({ name: 'index' })"
+                      >JCS Laptops</span
+                    >
+                    <span
+                      class="text-xl font-bold"
+                      @click="navigateTo({ name: 'spaces' })"
+                      >JCS Spaces</span
+                    >
+                  </div>
                 </Transition>
               </button>
             </li>
