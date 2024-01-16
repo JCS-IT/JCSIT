@@ -15,17 +15,16 @@ import {
   arrayRemove,
   arrayUnion,
   doc,
+  setDoc,
   updateDoc,
   type QueryDocumentSnapshot,
-  collection,
-  getDoc,
-  setDoc,
-  Timestamp,
 } from "firebase/firestore";
 
 const configData = useDocument<ConfigData>(
   doc(useFirestore(), "global/config"),
 );
+
+const user = useCurrentUser();
 
 const dayjs = useDayjs();
 
@@ -35,7 +34,6 @@ definePageMeta({
   layout: "full-width",
 });
 
-const router = useRouter();
 const route = useRoute("cart-id");
 
 const dialog = ref<HTMLDialogElement | null>(null);
@@ -86,6 +84,7 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
 };
 
 const handleEventClick = (clickInfo: EventClickArg) => {
+  if (!user) return;
   if (
     confirm(
       `Are you sure you want to delete the event '${clickInfo.event.title}'`,
