@@ -7,6 +7,7 @@ const dialog = ref<HTMLDialogElement | null>(null);
     class="btn btn-ghost"
     @click="dialog?.showModal()"
     title="Random Joke"
+    aria-label="Random Joke"
   >
     <IconCSS name="mdi:comedy" />
   </button>
