@@ -149,6 +149,7 @@ const calendarOptions = ref<CalendarOptions>({
   height: "50rem",
   windowResizeDelay: 0,
   selectLongPressDelay: 0,
+
   eventAdd: async (e) => {
     await updateDoc(bookingRef, {
       [`cart-${route.params.id}`]: arrayUnion({
@@ -220,7 +221,6 @@ const addEvent = (data: NewEvent) => {
         :metaData="metaData"
         @submit="addEvent"
         @cancel="dialog?.close()"
-        class="modal-box"
         :blocks="configData?.blocks"
       />
     </dialog>

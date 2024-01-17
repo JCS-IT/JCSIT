@@ -28,13 +28,14 @@
     "@fullcalendar/resource": "^6.1.10",
     "@fullcalendar/resource-timegrid": "^6.1.10",
     "@fullcalendar/vue3": "^6.1.10",
-    "@hebilicious/vue-query-nuxt": "^0.2.1",
     "@tanstack/vue-query": "^5.17.15",
+    "@types/git-rev-sync": "^2.0.2",
     "@vueuse/nuxt": "^10.7.2",
     "firebase": "^10.7.1",
     "git-rev-sync": "^3.0.2",
     "nuxt-icon": "^0.6.8",
     "vue3-toastify": "^0.2.1",
-    "vuefire": "^3.1.22"
+    "vuefire": "^3.1.22",
+    "zod": "^3.22.4"
   }
 }
