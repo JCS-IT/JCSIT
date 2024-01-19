@@ -84,7 +84,6 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
 };
 
 const handleEventClick = (clickInfo: EventClickArg) => {
-  if (!user) return;
   if (
     confirm(
       `Are you sure you want to delete the event '${clickInfo.event.title}'`,
