@@ -14,7 +14,13 @@ const breadcrumbs = computed(() => {
   });
 });
 
-const user = useCurrentUser();
+const user = ref(null);
+
+const auth = useFirebaseAuth();
+
+auth?.onAuthStateChanged((user) => {
+  user ? (user = user) : (user = null);
+});
 
 const config = useRuntimeConfig();
 </script>
