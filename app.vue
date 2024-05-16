@@ -14,13 +14,21 @@ const breadcrumbs = computed(() => {
   });
 });
 
-const user = useCurrentUser();
+const user = ref(null);
+
+const auth = useFirebaseAuth();
+
+auth?.onAuthStateChanged((user) => {
+  user ? (user = user) : (user = null);
+});
+
+const config = useRuntimeConfig();
 </script>
 
 <template>
   <div class="flex flex-col min-h-screen">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
-      <div class="navbar-start gap-2 flex-wrap">
+      <div class="justify-start gap-2 flex-wrap flex-grow w-full">
         <div class="dropdown">
           <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
             <IconCSS name="mdi:menu" />
@@ -54,7 +62,7 @@ const user = useCurrentUser();
           </ul>
         </div>
       </div>
-      <div class="navbar-end">
+      <div class="justify-end flex-shrink">
         <JokeDialog />
       </div>
     </header>
@@ -70,5 +78,12 @@ const user = useCurrentUser();
         </template>
       </Suspense>
     </main>
+    <footer class="footer pl-2 fixed bottom-0 [&>* *]:outline">
+      <span
+        class="text-transparent hover:text-base-content hover:text-xl transition-all"
+      >
+        {{ config.public.__GIT_HASH__ }}
+      </span>
+    </footer>
   </div>
 </template>

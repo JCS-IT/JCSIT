@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { JokeRes } from "@/types";
+import { useQuery } from "@tanstack/vue-query";
 
 const jokeQuery = useQuery<JokeRes>({
   queryKey: ["AllJoke"],

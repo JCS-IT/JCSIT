@@ -84,7 +84,6 @@ const handleDateSelect = (selectInfo: DateSelectArg) => {
 };
 
 const handleEventClick = (clickInfo: EventClickArg) => {
-  if (!user) return;
   if (
     confirm(
       `Are you sure you want to delete the event '${clickInfo.event.title}'`,
@@ -149,6 +148,7 @@ const calendarOptions = ref<CalendarOptions>({
   height: "50rem",
   windowResizeDelay: 0,
   selectLongPressDelay: 0,
+
   eventAdd: async (e) => {
     await updateDoc(bookingRef, {
       [`cart-${route.params.id}`]: arrayUnion({
@@ -220,7 +220,6 @@ const addEvent = (data: NewEvent) => {
         :metaData="metaData"
         @submit="addEvent"
         @cancel="dialog?.close()"
-        class="modal-box"
         :blocks="configData?.blocks"
       />
     </dialog>

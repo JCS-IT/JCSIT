@@ -22,7 +22,7 @@ watchEffect(() => {
 
 const updateCarts = async () => {
   await updateDoc(configRef, {
-    newFloors: [
+    floors: [
       {
         name: "Main Floor",
         carts: carts.value.filter((cart) => cart.location.floor == 1),
@@ -38,12 +38,12 @@ const updateCarts = async () => {
     ],
   });
 };
-
 const { width } = useWindowSize();
 </script>
 
 <template>
   <NewCart @submit="(d) => carts.push(d)" />
+  <button class="btn btn-primary" @click="updateCarts()">Save Changes</button>
 
   <div class="grid gap-2">
     <div
@@ -93,13 +93,10 @@ const { width } = useWindowSize();
         title="Room"
       />
       <input
-        type="text"
-        class="input input-bordered bg-inherit join-item"
-        placeholder="Color"
-        v-model="carts[i].color"
-        maxlength="7"
-        pattern="#[0-9a-fA-F]{3}([0-9a-fA-F]{3})?"
+        type="color"
+        class="input input-bordered bg-inherit join-item w-full"
         title="Color (HEX)"
+        v-model="carts[i].color"
       />
       <button
         class="btn btn-ghost join-item input-bordered"

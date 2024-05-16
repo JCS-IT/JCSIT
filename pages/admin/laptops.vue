@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { JokeRes, Laptop } from "@/types";
+import { useQuery } from "@tanstack/vue-query";
 
 definePageMeta({
   middleware: () => {

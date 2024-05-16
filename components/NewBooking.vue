@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import type { ConfigData, NewEvent } from "@/types";
 import type { DateSelectArg } from "@fullcalendar/core";
+import { z } from "zod";
 
 const props = defineProps<{
   metaData: DateSelectArg | null;
@@ -12,6 +13,15 @@ const emit = defineEmits<{
   (event: "submit", value: NewEvent): void;
   (event: "cancel"): void;
 }>();
+
+const schema = z.object({
+  name: z.string().min(1),
+  room: props.noRoom ? z.null() : z.number(),
+  block: z.object({
+    start: z.string().min(1),
+    end: z.string().min(1),
+  }),
+});
 
 const newEvent = ref<NewEvent>({
   name: "",
@@ -33,13 +43,7 @@ const clear = () => {
   };
 };
 
-const isDisabled = computed(
-  () =>
-    !newEvent.value.name ||
-    (!newEvent.value.room && !props.noRoom) ||
-    !newEvent.value.block.start ||
-    !newEvent.value.block.end,
-);
+const isDisabled = computed(() => !schema.safeParse(newEvent.value).success);
 
 defineExpose({
   clear,
@@ -47,7 +51,7 @@ defineExpose({
 </script>
 
 <template>
-  <div class="card bg-base-300 border">
+  <div class="card bg-base-300 border" v-bind="$attrs">
     <div class="card-body">
       <div class="form-control gap-2">
         <h2 class="text-2xl font-bold">New booking</h2>
