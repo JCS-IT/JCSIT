@@ -6,7 +6,7 @@ const jokeQuery = useQuery<JokeRes>({
   queryKey: ["AllJoke"],
   queryFn: () =>
     fetch(
-      "https://v2.jokeapi.dev/joke/Any?blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
+      "https://v2.jokeapi.dev/joke/Miscellaneous,Pun,Spooky,Christmas?blacklistFlags=nsfw,religious,political,racist,sexist,explicit",
     ).then((res) => res.json()),
 });
 </script>
