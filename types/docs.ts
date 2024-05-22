@@ -32,5 +32,5 @@ export interface ConfigDoc extends DocumentData {
       color: string;
     }[];
     rooms: string[];
-  };
+  }[];
 }
