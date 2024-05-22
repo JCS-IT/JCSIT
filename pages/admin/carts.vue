@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { doc, updateDoc } from "firebase/firestore";
-import type { Cart, ConfigData } from "~/types";
+import type { Cart, ConfigDoc } from "~/types";
 
 definePageMeta({
   middleware: "auth",
@@ -10,11 +10,11 @@ const carts = ref<Cart[]>([]);
 
 const configRef = doc(useFirestore(), "global/config");
 
-const configData = useDocument<ConfigData>(configRef);
+configDoc = useDocument<ConfigDoc>(configRef);
 
 watchEffect(() => {
-  if (configData.value?.floors) {
-    const floors = configData.value.floors;
+  if (configDoc.value?.floors) {
+    const floors = configDoc.value.floors;
     const allCarts = floors.flatMap((floor) => floor.carts);
     carts.value = allCarts;
   }

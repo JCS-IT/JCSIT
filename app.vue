@@ -29,22 +29,6 @@ const config = useRuntimeConfig();
   <div class="flex flex-col min-h-screen">
     <header class="navbar bg-base-100 sticky top-0 p-4 z-10 shadow-xl">
       <div class="justify-start gap-2 flex-wrap flex-grow w-full">
-        <div class="dropdown">
-          <div tabindex="0" role="button" class="btn btn-ghost btn-circle">
-            <IconCSS name="mdi:menu" />
-          </div>
-          <ul
-            tabindex="0"
-            class="menu menu-sm mt-3 dropdown-content z-[1] p-2 shadow-xl bg-base-200 rounded-box w-30"
-          >
-            <li>
-              <a @click="navigateTo({ name: 'spaces' })">Spaces</a>
-            </li>
-            <li v-if="user">
-              <a @click="navigateTo({ name: 'admin' })">Admin</a>
-            </li>
-          </ul>
-        </div>
         <div class="text-sm p-0 breadcrumbs" v-if="!route.meta.noBreadCrumbs">
           <ul>
             <li>

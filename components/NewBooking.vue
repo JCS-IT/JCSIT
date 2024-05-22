@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { ConfigData, NewEvent } from "@/types";
+import type { ConfigDoc, NewEvent } from "@/types";
 import type { DateSelectArg } from "@fullcalendar/core";
-import { z } from "zod";
+import { NewEventSchema } from "~/shared";
 
-const props = defineProps<{
+defineProps<{
   metaData: DateSelectArg | null;
-  blocks: ConfigData["blocks"];
+  blocks: ConfigDoc["blocks"];
   noRoom?: boolean;
 }>();
 
@@ -14,36 +14,22 @@ const emit = defineEmits<{
   (event: "cancel"): void;
 }>();
 
-const schema = z.object({
-  name: z.string().min(1),
-  room: props.noRoom ? z.null() : z.number(),
-  block: z.object({
-    start: z.string().min(1),
-    end: z.string().min(1),
-  }),
-});
-
-const newEvent = ref<NewEvent>({
+const blankEvent: NewEvent = {
   name: "",
+  email: "",
   room: null,
   block: {
     start: "",
     end: "",
   },
-});
-
-const clear = () => {
-  newEvent.value = {
-    name: "",
-    room: null,
-    block: {
-      start: "",
-      end: "",
-    },
-  };
 };
 
-const isDisabled = computed(() => !schema.safeParse(newEvent.value).success);
+const newEvent = ref({ ...blankEvent });
+
+const valid = computed(() => NewEventSchema.safeParse(newEvent.value));
+
+
+const clear = () => Object.assign(newEvent.value, blankEvent);
 
 defineExpose({
   clear,
@@ -57,14 +43,27 @@ defineExpose({
         <h2 class="text-2xl font-bold">New booking</h2>
         <span>{{ $dayjs(metaData?.start).format("dddd, MMMM DD") }}</span>
         <!-- Info -->
-        <InputBasic type="text" placeholder="Name" v-model="newEvent.name" />
         <input
-          class="input input-bordered"
+          class="input input-bordered invalid:border-error"
+          type="text"
+          placeholder="John Doe"
+          pattern="[A-Za-z\s]+"
+          v-model="newEvent.name"
+        />
+        <input
+          class="input input-bordered invalid:border-error"
+          placeholder="jdoe@cbe.ab.ca"
+          type="email"
+          pattern=".+@cbe.ab.ca"
+          v-model="newEvent.email"
+        />
+        <input
+          class="input input-bordered invalid:border-error"
           type="number"
           inputmode="numeric"
           v-model="newEvent.room"
           placeholder="Room Number"
-          pattern="[0-9]*"
+          pattern="[0-9]{4}"
           maxlength="4"
           v-if="!noRoom"
         />
@@ -76,7 +75,7 @@ defineExpose({
           ref="select"
           @change="newEvent.block.end = newEvent.block.start"
         >
-          <option value="" disabled selected hidden>Select an option</option>
+          <option value="" disabled selected hidden>Start Block</option>
           <option
             v-for="option in blocks"
             :key="option.name"
@@ -93,7 +92,7 @@ defineExpose({
           class="select select-bordered w-full"
           ref="select"
         >
-          <option value="" disabled selected hidden>Select an option</option>
+          <option value="" disabled selected hidden>End Block</option>
           <option
             v-for="option in blocks"
             :key="option.name"
@@ -110,7 +109,7 @@ defineExpose({
             class="btn-success w-full"
             @click="emit('submit', newEvent)"
             tooltip="Confirm"
-            :disabled="isDisabled"
+            :disabled="!valid.success"
           >
             <Icon name="mdi:check" />
           </Button>

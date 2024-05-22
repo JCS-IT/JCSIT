@@ -1,4 +1,10 @@
+import type { z } from "zod";
+import type { NewEventSchema } from "~/shared";
+
+export * from "./docs";
 export * from "./funny";
+
+export type NewEvent = z.infer<typeof NewEventSchema>;
 
 export interface Laptop {
   id: string;
@@ -19,19 +25,4 @@ export interface Cart {
 export interface Floor {
   name: string;
   carts: Cart[];
-}
-
-export interface NewEvent {
-  name: string;
-  room: number | null;
-  block: {
-    start: string;
-    end: string;
-  };
-}
-
-export interface ConfigData {
-  floors: Floor[];
-  blocks: { name: string; start: string; end: string }[];
-  rooms: string[];
 }

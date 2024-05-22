@@ -60,14 +60,14 @@ const newCart = ref<Cart>({
           placeholder="Room"
           v-model="newCart.location.room"
         />
-        <input
-          type="text"
-          class="input input-bordered bg-inherit join-item"
-          placeholder="Color (hex)"
-          v-model="newCart.color"
-          maxlength="7"
-          pattern="[0-9a-fA-F]{3}([0-9a-fA-F]{3})?"
-        />
+          <input
+            type="text"
+            class="input input-bordered bg-inherit join-item"
+            placeholder="Color (hex)"
+            v-model="newCart.color"
+            maxlength="7"
+            pattern="[0-9a-fA-F]{3}([0-9a-fA-F]{3})?"
+          />
       </div>
       <button
         class="btn btn-block btn-success mt-2"
@@ -84,25 +84,3 @@ const newCart = ref<Cart>({
     </form>
   </dialog>
 </template>
-
-<style scoped>
-/* input[type="color"] {
-  width: 3rem;
-  height: 3rem;
-  padding: 0.5rem;
-  background-color: transparent;
-  border: 0;
-  border-radius: 100%;
-}
-input[type="color" i] {
-  width: 44px;
-  height: 23px;
-  background-color: buttonface;
-  cursor: default;
-  border-width: 1px;
-  border-style: solid;
-  border-color: rgb(169, 169, 169);
-  border-image: initial;
-  padding: 1px 2px;
-} */
-</style>
