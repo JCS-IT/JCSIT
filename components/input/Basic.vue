@@ -3,5 +3,12 @@ const modelValue = defineModel();
 </script>
 
 <template>
-  <input class="input input-bordered" v-model="modelValue" v-bind="$attrs" />
+  <label class="label">
+    <input
+      class="input input-bordered invalid:border-error"
+      v-model="modelValue"
+      v-bind="$attrs"
+    />
+    <span class="text-xs">hello</span>
+  </label>
 </template>
