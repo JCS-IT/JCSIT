@@ -12,3 +12,25 @@ export interface BookingDoc extends DocumentData {
     };
   }[];
 }
+
+export interface ConfigDoc extends DocumentData {
+  blocks: {
+    name: string;
+    start: string;
+    end: string;
+  }[];
+
+  floors: {
+    name: string;
+    carts: {
+      id: number;
+      name: string;
+      location: {
+        room: string;
+        floor: string | number;
+      };
+      color: string;
+    }[];
+    rooms: string[];
+  };
+}

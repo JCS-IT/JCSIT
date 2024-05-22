@@ -26,9 +26,3 @@ export interface Floor {
   name: string;
   carts: Cart[];
 }
-
-export interface ConfigData {
-  floors: Floor[];
-  blocks: { name: string; start: string; end: string }[];
-  rooms: string[];
-}

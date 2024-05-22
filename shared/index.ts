@@ -22,7 +22,10 @@ export const NewEventSchema = z.object({
     .refine((e) => e.endsWith("@cbe.ab.ca"), {
       message: "Please enter a valid CBE email",
     }),
-  room: z.number().min(4).max(4).or(z.null()),
+  room: z
+    .number()
+    .refine((e) => e.toString().length === 4)
+    .or(z.null()),
   block: z.object({
     start: z.string().min(1),
     end: z.string().min(1),
