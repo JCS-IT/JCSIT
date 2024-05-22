@@ -27,8 +27,8 @@ const groups = computed(() => {
       const rooms =
         floor.rooms?.map((room) => {
           return {
-            text: parseInt(room) ? `Room ${room}` : room,
-            target: stringToSlug(room),
+            text: parseInt(room.name) ? `Room ${room}` : room,
+            target: stringToSlug(room.name),
             style: null,
           };
         }) || [];
@@ -69,6 +69,7 @@ const tab = ref<"carts" | "rooms">("carts");
               'tab-active': tab === 'rooms',
             }"
             @click="tab = 'rooms'"
+            disabled
           >
             Rooms
           </button>
