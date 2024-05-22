@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { ConfigData, NewEvent } from "@/types";
 import type { DateSelectArg } from "@fullcalendar/core";
-import { z } from "zod";
+import { NewEventSchema } from "~/shared";
 
-const props = defineProps<{
+defineProps<{
   metaData: DateSelectArg | null;
   blocks: ConfigData["blocks"];
   noRoom?: boolean;
@@ -14,36 +14,23 @@ const emit = defineEmits<{
   (event: "cancel"): void;
 }>();
 
-const schema = z.object({
-  name: z.string().min(1),
-  room: props.noRoom ? z.null() : z.number(),
-  block: z.object({
-    start: z.string().min(1),
-    end: z.string().min(1),
-  }),
-});
-
-const newEvent = ref<NewEvent>({
+const blankEvent: NewEvent = {
   name: "",
+  email: "",
   room: null,
   block: {
     start: "",
     end: "",
   },
-});
-
-const clear = () => {
-  newEvent.value = {
-    name: "",
-    room: null,
-    block: {
-      start: "",
-      end: "",
-    },
-  };
 };
 
-const isDisabled = computed(() => !schema.safeParse(newEvent.value).success);
+const newEvent = ref({ ...blankEvent });
+
+const clear = () => Object.assign(newEvent.value, blankEvent);
+
+const isDisabled = computed(
+  () => !NewEventSchema.safeParse(newEvent.value).success,
+);
 
 defineExpose({
   clear,
@@ -56,54 +43,69 @@ defineExpose({
       <div class="form-control gap-2">
         <h2 class="text-2xl font-bold">New booking</h2>
         <span>{{ $dayjs(metaData?.start).format("dddd, MMMM DD") }}</span>
-        <!-- Info -->
-        <InputBasic type="text" placeholder="Name" v-model="newEvent.name" />
-        <input
-          class="input input-bordered"
-          type="number"
-          inputmode="numeric"
-          v-model="newEvent.room"
-          placeholder="Room Number"
-          pattern="[0-9]*"
-          maxlength="4"
-          v-if="!noRoom"
-        />
+        <form class="form-control gap-1">
+          <!-- Info -->
+          <input
+            class="input input-bordered invalid:border-error"
+            type="text"
+            placeholder="John Doe"
+            pattern="[a-z]+"
+            v-model="newEvent.name"
+          />
+          <input
+            class="input input-bordered invalid:border-error"
+            placeholder="jdoe@cbe.ab.ca"
+            type="email"
+            pattern=".+@cbe.ab.ca"
+            v-model="newEvent.email"
+          />
+          <input
+            class="input input-bordered invalid:border-error"
+            type="number"
+            inputmode="numeric"
+            v-model="newEvent.room"
+            placeholder="Room Number"
+            pattern="[0-9]{4}"
+            maxlength="4"
+            v-if="!noRoom"
+          />
 
-        <select
-          tabindex="0"
-          v-model="newEvent.block.start"
-          class="select select-bordered w-full"
-          ref="select"
-          @change="newEvent.block.end = newEvent.block.start"
-        >
-          <option value="" disabled selected hidden>Select an option</option>
-          <option
-            v-for="option in blocks"
-            :key="option.name"
-            tabindex="1"
-            class="text-lg"
-            :value="option.name"
+          <select
+            tabindex="0"
+            v-model="newEvent.block.start"
+            class="select select-bordered w-full"
+            ref="select"
+            @change="newEvent.block.end = newEvent.block.start"
           >
-            {{ option.name }}
-          </option>
-        </select>
-        <select
-          tabindex="0"
-          v-model="newEvent.block.end"
-          class="select select-bordered w-full"
-          ref="select"
-        >
-          <option value="" disabled selected hidden>Select an option</option>
-          <option
-            v-for="option in blocks"
-            :key="option.name"
-            tabindex="1"
-            class="text-lg"
-            :value="option.name"
+            <option value="" disabled selected hidden>Start Block</option>
+            <option
+              v-for="option in blocks"
+              :key="option.name"
+              tabindex="1"
+              class="text-lg"
+              :value="option.name"
+            >
+              {{ option.name }}
+            </option>
+          </select>
+          <select
+            tabindex="0"
+            v-model="newEvent.block.end"
+            class="select select-bordered w-full"
+            ref="select"
           >
-            {{ option.name }}
-          </option>
-        </select>
+            <option value="" disabled selected hidden>End Block</option>
+            <option
+              v-for="option in blocks"
+              :key="option.name"
+              tabindex="1"
+              class="text-lg"
+              :value="option.name"
+            >
+              {{ option.name }}
+            </option>
+          </select>
+        </form>
 
         <div class="grid grid-cols-2 gap-2">
           <Button
