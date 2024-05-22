@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { arrayRemove, arrayUnion, doc, updateDoc } from "firebase/firestore";
-import type { ConfigData } from "~/types";
+import type { ConfigDoc } from "~/types";
 
 definePageMeta({
   middleware: "auth",
@@ -10,11 +10,11 @@ const rooms = ref<string[]>([]);
 const newRoom = ref("");
 
 const configRef = doc(useFirestore(), "global", "config");
-const configData = useDocument<ConfigData>(configRef);
+const configDoc = useDocument<ConfigDoc>(configRef);
 
 watchEffect(() => {
-  if (configData.value?.rooms) {
-    rooms.value = configData.value.rooms;
+  if (configDoc.value?.rooms) {
+    rooms.value = configDoc.value.rooms;
   }
 });
 
@@ -64,7 +64,7 @@ const updateRooms = async () => {
     </div>
     <div class="divider" />
 
-    <div v-if="configData?.rooms && configData.rooms.length > 0">
+    <div v-if="configDoc?.rooms && configDoc.rooms.length > 0">
       <div class="flex flex-wrap max-w-4xl gap-1">
         <div
           class="flex join items-center justify-center flex-grow"

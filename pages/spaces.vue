@@ -1,10 +1,10 @@
 <script setup lang="ts">
+import type { ConfigDoc } from "@/types";
 import { doc } from "firebase/firestore";
-import type { ConfigData } from "@/types";
 import { stringToSlug } from "~/utils/parse";
 const router = useRouter();
 
-const configData = useDocument<ConfigData>(
+const configDoc = useDocument<ConfigDoc>(
   doc(useFirestore(), "global/config"),
 );
 </script>
@@ -12,7 +12,7 @@ const configData = useDocument<ConfigData>(
 <template>
   <div
     class="grid gap-2"
-    v-if="configData?.rooms && configData?.rooms.length > 0"
+    v-if="configDoc?.rooms && configDoc?.rooms.length > 0"
   >
     <div
       class="grid gap-2 flex-wrap"
@@ -25,14 +25,14 @@ const configData = useDocument<ConfigData>(
       <div class="divider h-0">{{ floor }}</div>
       <div class="flex flex-row flex-wrap gap-1 justify-center">
         <Button
-          v-for="room in configData?.rooms.filter(
+          v-for="room in configDoc?.filter(
             (room) =>
               room.includes(floor) || room.split('')[0] == (i + 1).toString(),
           )"
           @click="
             navigateTo({
-              name: 'spaces-room',
-              params: { room: stringToSlug(room) },
+              name: 'booking-target',
+              params: { target: stringToSlug(room) },
             })
           "
           class="flex-grow"

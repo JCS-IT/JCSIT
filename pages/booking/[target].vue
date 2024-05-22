@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { blocks } from "@/data";
-import type { ConfigData, NewEvent } from "@/types";
+import type { BookingDoc, ConfigDoc, NewEvent } from "@/types";
 import type {
   CalendarApi,
   CalendarOptions,
@@ -17,17 +17,16 @@ import {
   removeBooking,
 } from "~/shared";
 
-const configData = useDocument<ConfigData>(
+const configDoc = useDocument<ConfigDoc>(
   doc(useFirestore(), "global/config"),
 );
 
 definePageMeta({
   title: "Booking",
-  description: "Book a laptop cart",
   layout: "full-width",
 });
 
-const route = useRoute("cart-id");
+const route = useRoute("booking-target");
 
 const dialog = ref<HTMLDialogElement | null>(null);
 
@@ -48,38 +47,18 @@ const targetPose = ref({
 useDocument(
   doc(useFirestore(), "bookings", useDayjs()().year().toString()).withConverter(
     {
-      fromFirestore: (
-        snap: QueryDocumentSnapshot<{
-          [cart: string]: {
-            title: string;
-            start: string;
-            end: string;
-            extendedProps: {
-              email: string;
-              room: string;
-              block: string;
-            };
-          }[];
-        }>,
-      ) => {
+      fromFirestore: (snap: QueryDocumentSnapshot<BookingDoc>) => {
         const api: CalendarApi = calendar.value?.getApi();
 
         const data = snap.data();
 
         api.removeAllEvents();
 
-        data[`cart-${route.params.id}`]?.forEach((event) => {
-          const { title, start, end, extendedProps } = event;
-
-          api.addEvent({
-            title,
-            start,
-            end,
-            extendedProps,
-          });
+        api.addEventSource({
+          events: data[route.params.target],
         });
 
-        return data[`cart-${route.params.id}`];
+        return data[route.params.target];
       },
       toFirestore: (data) => {
         return data;
@@ -101,10 +80,10 @@ const calendarOptions = ref<CalendarOptions>({
       : null;
   },
   eventAdd: async (e) => {
-    await addBooking(e, `cart-${route.params.id}`);
+    await addBooking(e, route.params.target);
   },
   eventRemove: async (e) => {
-    await removeBooking(e, `cart-${route.params.id}`);
+    await removeBooking(e, route.params.target);
   },
 });
 
@@ -139,13 +118,13 @@ const addEvent = (data: NewEvent) => {
 </script>
 
 <template>
-  <div class="relative w-full" v-if="configData">
+  <div class="relative w-full" v-if="configDoc">
     <dialog ref="dialog" class="modal">
       <NewBooking
         :metaData="metaData"
         @submit="addEvent"
         @cancel="dialog?.close()"
-        :blocks="configData?.blocks"
+        :blocks="configDoc?.blocks"
       />
     </dialog>
     <Transition>
@@ -158,7 +137,7 @@ const addEvent = (data: NewEvent) => {
           :metaData="metaData"
           @submit="addEvent"
           @cancel="prompts.create = false"
-          :blocks="configData?.blocks"
+          :blocks="configDoc?.blocks"
         />
       </div>
     </Transition>
