@@ -1,37 +1,33 @@
 <script setup lang="ts">
 import { blocks } from "@/data";
-import type { ConfigData, NewEvent } from "@/types";
+import type { BookingDoc, ConfigData, NewEvent } from "@/types";
 import type {
   CalendarApi,
   CalendarOptions,
   DateSelectArg,
   EventClickArg,
 } from "@fullcalendar/core";
-import dayGridPlugin from "@fullcalendar/daygrid";
-import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/vue3";
-import type { FirebaseError } from "firebase/app";
+import { doc, type QueryDocumentSnapshot } from "firebase/firestore";
 import {
-  arrayRemove,
-  arrayUnion,
-  doc,
-  setDoc,
-  updateDoc,
-  type QueryDocumentSnapshot,
-} from "firebase/firestore";
+  addBooking,
+  BaseCalendarOptions,
+  handleDateSelect,
+  NewEventSchema,
+  removeBooking,
+} from "~/shared";
 
 const configData = useDocument<ConfigData>(
   doc(useFirestore(), "global/config"),
 );
 
 definePageMeta({
-  title: "Booking",
+  title: "Room Booking",
   description: "Book a space",
   layout: "full-width",
 });
 
 const route = useRoute("spaces-room");
-const dayjs = useDayjs();
 
 const dialog = ref<HTMLDialogElement | null>(null);
 
@@ -40,7 +36,7 @@ const prompts = ref({
   delete: false,
 });
 
-const calendar = ref();
+const calendar = ref<typeof FullCalendar | null>(null);
 
 const metaData = ref<DateSelectArg | null>(null);
 
@@ -49,139 +45,59 @@ const targetPose = ref({
   y: 0,
 });
 
-const handleDateSelect = (selectInfo: DateSelectArg) => {
-  let calendarApi = selectInfo.view.calendar;
-
-  if (!selectInfo.jsEvent) return;
-
-  if (screen.width > 768) {
-    targetPose.value.x = selectInfo.jsEvent.x - selectInfo.jsEvent.offsetX;
-    targetPose.value.y = selectInfo.jsEvent.y - selectInfo.jsEvent.offsetY;
-
-    targetPose.value.x = Math.min(
-      Math.max(targetPose.value.x, 0),
-      window.innerWidth - 350,
-    );
-    targetPose.value.y = Math.min(
-      Math.max(targetPose.value.y, 0),
-      window.innerHeight - 520,
-    );
-
-    prompts.value.create =
-      metaData.value?.startStr === selectInfo.startStr
-        ? !prompts.value.create
-        : true;
-  } else {
-    dialog.value?.showModal();
-  }
-
-  calendarApi.unselect(); // clear date selection
-
-  metaData.value = selectInfo;
-};
-
-const handleEventClick = (clickInfo: EventClickArg) => {
-  if (
-    confirm(
-      `Are you sure you want to delete the event '${clickInfo.event.title}'`,
-    )
-  ) {
-    clickInfo.event.remove();
-  }
-};
-
-const bookingRef = doc(useFirestore(), "bookings", dayjs().year().toString());
-
 useDocument(
-  bookingRef.withConverter({
-    fromFirestore: (
-      snap: QueryDocumentSnapshot<{
-        [cart: string]: {
-          title: string;
-          start: string;
-          end: string;
-          extendedProps: {
-            room: string;
-            block: string;
-          };
-        }[];
-      }>,
-    ) => {
-      const api: CalendarApi = calendar.value?.getApi();
+  doc(useFirestore(), "bookings", useDayjs()().year().toString()).withConverter(
+    {
+      fromFirestore: (snap: QueryDocumentSnapshot<BookingDoc>) => {
+        const api: CalendarApi = calendar.value?.getApi();
 
-      const data = snap.data();
+        const data = snap.data();
 
-      api.removeAllEvents();
+        api.removeAllEvents();
 
-      data[`${route.params.room}`]?.forEach((event) => {
-        api.addEvent({
-          title: event.title,
-          start: event.start,
-          end: event.end,
-          extendedProps: event.extendedProps,
+        data[route.params.room]?.forEach((event) => {
+          const { title, start, end, extendedProps } = event;
+
+          api.addEvent({
+            title,
+            start,
+            end,
+            extendedProps,
+          });
         });
-      });
 
-      return data[`${route.params.room}`];
+        return data[route.params.room];
+      },
+      toFirestore: (data) => {
+        return data;
+      },
     },
-    toFirestore: (data) => {
-      return data;
-    },
-  }),
+  ),
 );
 
 const calendarOptions = ref<CalendarOptions>({
-  plugins: [dayGridPlugin, interactionPlugin],
-  initialView: "dayGridMonth",
-  nowIndicator: true,
-  editable: true,
-  weekends: false,
-  selectable: true,
-  selectMirror: true,
-  dayMaxEvents: true,
-  defaultAllDay: false,
-  select: handleDateSelect,
-  eventClick: handleEventClick,
-  height: "50rem",
-  windowResizeDelay: 0,
-  selectLongPressDelay: 0,
+  ...BaseCalendarOptions,
+  select: (selectInfo) => {
+    handleDateSelect(selectInfo, targetPose, prompts, metaData, dialog);
+  },
+  eventClick: (clickInfo: EventClickArg) => {
+    return confirm(
+      `Are you sure you want to delete the event '${clickInfo.event.title}'`,
+    )
+      ? clickInfo.event.remove()
+      : null;
+  },
   eventAdd: async (e) => {
-    await updateDoc(bookingRef, {
-      [`${route.params.room}`]: arrayUnion({
-        title: e.event.title,
-        start: e.event.startStr,
-        end: e.event.endStr,
-        extendedProps: e.event.extendedProps,
-      }),
-    }).catch(async (err: FirebaseError) => {
-      if (err.code == "not-found") {
-        await setDoc(bookingRef, {
-          [`${route.params.room}`]: [
-            {
-              title: e.event.title,
-              start: e.event.startStr,
-              end: e.event.endStr,
-              extendedProps: e.event.extendedProps,
-            },
-          ],
-        });
-      }
-    });
+    await addBooking(e, route.params.room);
   },
   eventRemove: async (e) => {
-    await updateDoc(bookingRef, {
-      [`${route.params.room}`]: arrayRemove({
-        title: e.event.title,
-        start: e.event.startStr,
-        end: e.event.endStr,
-        extendedProps: e.event.extendedProps,
-      }),
-    });
+    await removeBooking(e, route.params.room);
   },
 });
 
 const addEvent = (data: NewEvent) => {
-  if (!data.name || !data.room || !data.block.start || !data.block.end) return;
+  const valid = NewEventSchema.safeParse(data);
+  if (!valid.success) return;
 
   const startBlock = blocks.find((b) => b.name == data.block.start);
   const endBlock = blocks.find((b) => b.name == data.block.end);
@@ -216,9 +132,7 @@ const addEvent = (data: NewEvent) => {
         :metaData="metaData"
         @submit="addEvent"
         @cancel="dialog?.close()"
-        class="modal-box"
         :blocks="configData?.blocks"
-        noRoom
       />
     </dialog>
     <Transition>
@@ -232,7 +146,6 @@ const addEvent = (data: NewEvent) => {
           @submit="addEvent"
           @cancel="prompts.create = false"
           :blocks="configData?.blocks"
-          noRoom
         />
       </div>
     </Transition>
